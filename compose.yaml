@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=ticket'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=ticket'
+    ports:
+      - '5432'
+  redis:
+    image: 'redis:latest'
+    ports:
+      - '6379'
+  elasticsearch:
+    image: 'elasticsearch:9.2.8'
+    environment:
+      - 'ELASTIC_PASSWORD=secret'
+      - 'discovery.type=single-node'
+      - 'xpack.security.enabled=false'
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    ports:
+      - '9200'
+      - '9300'
+  kafka:
+    image: 'confluentinc/cp-kafka:7.6.1'
+    environment:
+      - 'KAFKA_NODE_ID=1'
+      - 'KAFKA_PROCESS_ROLES=broker,controller'
+      - 'KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093'
+      - 'KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093'
+      # 호스트(앱)에서 localhost:9092 로 접근 가능하도록 advertised listener 를 localhost 로 노출
+      - 'KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092'
+      - 'KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT'
+      - 'KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER'
+      - 'KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1'
+      - 'CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk'
+    ports:
+      # 고정 매핑: 앱의 spring.kafka.bootstrap-servers=localhost:9092 와 일치
+      - '9092:9092'
