@@ -10,7 +10,7 @@ import com.gijun.ticketserver.infrastructure.adapter.`in`.user.web.dto.RegisterR
 import com.gijun.ticketserver.infrastructure.adapter.`in`.user.web.dto.TokenResponse
 import com.gijun.ticketserver.infrastructure.adapter.`in`.user.web.dto.UserResponse
 import com.gijun.ticketserver.infrastructure.config.OpenApiConfig
-import com.gijun.ticketserver.infrastructure.security.AuthenticatedUser
+import com.gijun.ticketserver.infrastructure.config.security.AuthenticatedUser
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses

@@ -1,4 +1,4 @@
-package com.gijun.ticketserver.infrastructure.security
+package com.gijun.ticketserver.infrastructure.config.security
 
 import com.gijun.ticketserver.application.user.port.out.UserTokenPort
 import jakarta.servlet.FilterChain

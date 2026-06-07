@@ -1,6 +1,5 @@
 package com.gijun.ticketserver.infrastructure.config.security
 
-import com.gijun.ticketserver.infrastructure.security.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
