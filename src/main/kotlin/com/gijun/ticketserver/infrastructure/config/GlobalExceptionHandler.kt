@@ -1,5 +1,6 @@
 package com.gijun.ticketserver.infrastructure.config
 
+import com.gijun.ticketserver.domain.exception.TicketEventException
 import com.gijun.ticketserver.domain.exception.UserException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -26,6 +27,16 @@ class GlobalExceptionHandler {
             is UserException.InvalidEmail,
             is UserException.InvalidPassword,
             is UserException.InvalidResetToken -> HttpStatus.BAD_REQUEST
+        }
+        return ResponseEntity.status(status)
+            .body(ErrorResponse(status.value(), e.message ?: status.reasonPhrase))
+    }
+
+    @ExceptionHandler(TicketEventException::class)
+    fun handleTicketEventException(e: TicketEventException): ResponseEntity<ErrorResponse> {
+        val status = when (e) {
+            is TicketEventException.TicketEventNotFound -> HttpStatus.NOT_FOUND
+            is TicketEventException.InvalidStatusTransition -> HttpStatus.CONFLICT
         }
         return ResponseEntity.status(status)
             .body(ErrorResponse(status.value(), e.message ?: status.reasonPhrase))

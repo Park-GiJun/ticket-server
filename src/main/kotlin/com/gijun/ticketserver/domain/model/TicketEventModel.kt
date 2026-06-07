@@ -2,6 +2,7 @@ package com.gijun.ticketserver.domain.model
 
 import com.gijun.ticketserver.domain.enums.TicketEventCategory
 import com.gijun.ticketserver.domain.enums.TicketEventStatus
+import com.gijun.ticketserver.domain.exception.TicketEventException
 import java.time.Instant
 
 /**
@@ -40,4 +41,39 @@ data class TicketEventModel(
 
     fun withStatus(newStatus: TicketEventStatus): TicketEventModel =
         copy(ticketEventStatus = newStatus)
+
+    /** 예매 오픈: `SCHEDULED` 상태에서만 가능. */
+    fun open(): TicketEventModel = transitionTo(
+        TicketEventStatus.OPEN,
+        allowedFrom = setOf(TicketEventStatus.SCHEDULED),
+    )
+
+    /** 예매 마감: `OPEN` 상태에서만 가능. */
+    fun close(): TicketEventModel = transitionTo(
+        TicketEventStatus.CLOSED,
+        allowedFrom = setOf(TicketEventStatus.OPEN),
+    )
+
+    /** 이벤트 취소: 종료/취소된 이벤트가 아니면 가능. */
+    fun cancel(): TicketEventModel = transitionTo(
+        TicketEventStatus.CANCELLED,
+        allowedFrom = setOf(
+            TicketEventStatus.SCHEDULED,
+            TicketEventStatus.OPEN,
+            TicketEventStatus.CLOSED,
+            TicketEventStatus.SOLD_OUT,
+        ),
+    )
+
+    private fun transitionTo(
+        target: TicketEventStatus,
+        allowedFrom: Set<TicketEventStatus>,
+    ): TicketEventModel {
+        if (ticketEventStatus !in allowedFrom) {
+            throw TicketEventException.InvalidStatusTransition(
+                "$ticketEventStatus 상태에서는 $target 로 전이할 수 없습니다",
+            )
+        }
+        return withStatus(target)
+    }
 }
