@@ -48,4 +48,10 @@ class GlobalExceptionHandler {
         return ResponseEntity.badRequest()
             .body(ErrorResponse(HttpStatus.BAD_REQUEST.value(), "요청 값이 올바르지 않습니다", fieldErrors))
     }
+
+    /** 도메인 모델의 생성 불변식(require) 위반 등. 잘못된 입력이므로 400 으로 매핑한다. */
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleIllegalArgument(e: IllegalArgumentException): ResponseEntity<ErrorResponse> =
+        ResponseEntity.badRequest()
+            .body(ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.message ?: "잘못된 요청입니다"))
 }
