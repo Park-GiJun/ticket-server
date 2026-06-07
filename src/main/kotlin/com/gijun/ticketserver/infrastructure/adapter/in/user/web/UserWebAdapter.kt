@@ -1,8 +1,11 @@
 package com.gijun.ticketserver.infrastructure.adapter.`in`.user.web
 
 import com.gijun.ticketserver.application.user.dto.GetUserQuery
-import com.gijun.ticketserver.application.user.port.`in`.UserCommandUseCases
-import com.gijun.ticketserver.application.user.port.`in`.UserQueryUseCases
+import com.gijun.ticketserver.application.user.port.`in`.GetUserUseCase
+import com.gijun.ticketserver.application.user.port.`in`.LoginUseCase
+import com.gijun.ticketserver.application.user.port.`in`.RegisterUserUseCase
+import com.gijun.ticketserver.application.user.port.`in`.RequestPasswordResetUseCase
+import com.gijun.ticketserver.application.user.port.`in`.ResetPasswordUseCase
 import com.gijun.ticketserver.infrastructure.adapter.`in`.user.web.dto.LoginRequest
 import com.gijun.ticketserver.infrastructure.adapter.`in`.user.web.dto.PasswordResetConfirmRequest
 import com.gijun.ticketserver.infrastructure.adapter.`in`.user.web.dto.PasswordResetRequest
@@ -30,8 +33,11 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api")
 class UserWebAdapter(
-    private val userCommandUseCases: UserCommandUseCases,
-    private val userQueryUseCases: UserQueryUseCases,
+    private val registerUserUseCase: RegisterUserUseCase,
+    private val loginUseCase: LoginUseCase,
+    private val requestPasswordResetUseCase: RequestPasswordResetUseCase,
+    private val resetPasswordUseCase: ResetPasswordUseCase,
+    private val getUserUseCase: GetUserUseCase,
 ) {
 
     @Operation(summary = "회원가입", description = "이메일/비밀번호/이름으로 사용자를 등록한다.")
@@ -43,7 +49,7 @@ class UserWebAdapter(
     @PostMapping("/auth/register")
     @ResponseStatus(HttpStatus.CREATED)
     fun register(@Valid @RequestBody request: RegisterRequest): UserResponse =
-        UserResponse.from(userCommandUseCases.register(request.toCommand()))
+        UserResponse.from(registerUserUseCase.register(request.toCommand()))
 
     @Operation(summary = "로그인", description = "인증 후 JWT 액세스 토큰을 발급한다.")
     @ApiResponses(
@@ -53,7 +59,7 @@ class UserWebAdapter(
     )
     @PostMapping("/auth/login")
     fun login(@Valid @RequestBody request: LoginRequest): TokenResponse =
-        TokenResponse.from(userCommandUseCases.login(request.toCommand()))
+        TokenResponse.from(loginUseCase.login(request.toCommand()))
 
     @Operation(
         summary = "비밀번호 재설정 요청",
@@ -63,7 +69,7 @@ class UserWebAdapter(
     @PostMapping("/auth/password-reset/request")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun requestPasswordReset(@Valid @RequestBody request: PasswordResetRequest) {
-        userCommandUseCases.requestPasswordReset(request.toCommand())
+        requestPasswordResetUseCase.requestPasswordReset(request.toCommand())
     }
 
     @Operation(summary = "비밀번호 재설정 확정", description = "재설정 토큰과 새 비밀번호로 비밀번호를 변경한다.")
@@ -74,7 +80,7 @@ class UserWebAdapter(
     @PostMapping("/auth/password-reset/confirm")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun confirmPasswordReset(@Valid @RequestBody request: PasswordResetConfirmRequest) {
-        userCommandUseCases.resetPassword(request.toCommand())
+        resetPasswordUseCase.resetPassword(request.toCommand())
     }
 
     @Operation(summary = "내 정보 조회", description = "인증된 사용자의 정보를 반환한다.")
@@ -85,5 +91,5 @@ class UserWebAdapter(
     @SecurityRequirement(name = OpenApiConfig.BEARER_SCHEME)
     @GetMapping("/users/me")
     fun me(@AuthenticationPrincipal principal: AuthenticatedUser): UserResponse =
-        UserResponse.from(userQueryUseCases.getById(GetUserQuery(principal.userId)))
+        UserResponse.from(getUserUseCase.getById(GetUserQuery(principal.userId)))
 }

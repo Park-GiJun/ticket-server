@@ -6,7 +6,10 @@ import com.gijun.ticketserver.application.user.dto.RequestPasswordResetCommand
 import com.gijun.ticketserver.application.user.dto.ResetPasswordCommand
 import com.gijun.ticketserver.application.user.dto.TokenResult
 import com.gijun.ticketserver.application.user.dto.UserResult
-import com.gijun.ticketserver.application.user.port.`in`.UserCommandUseCases
+import com.gijun.ticketserver.application.user.port.`in`.LoginUseCase
+import com.gijun.ticketserver.application.user.port.`in`.RegisterUserUseCase
+import com.gijun.ticketserver.application.user.port.`in`.RequestPasswordResetUseCase
+import com.gijun.ticketserver.application.user.port.`in`.ResetPasswordUseCase
 import com.gijun.ticketserver.application.user.port.out.UserMemoryPort
 import com.gijun.ticketserver.application.user.port.out.UserMessagePort
 import com.gijun.ticketserver.application.user.port.out.UserPersistencePort
@@ -28,7 +31,10 @@ class UserCommandHandler(
     private val userTokenPort: UserTokenPort,
     private val passwordEncoder: PasswordEncoder,
     private val userDomainService: UserDomainService = UserDomainService(),
-) : UserCommandUseCases {
+) : RegisterUserUseCase,
+    LoginUseCase,
+    RequestPasswordResetUseCase,
+    ResetPasswordUseCase {
 
     override fun register(command: RegisterUserCommand): UserResult {
         val email = userDomainService.normalizeEmail(command.email)
