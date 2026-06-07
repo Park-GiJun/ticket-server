@@ -1,4 +1,5 @@
 package com.gijun.ticketserver.application.user.dto
 
-class UserQueries {
-}
+data class GetUserQuery(
+    val id: Long,
+)

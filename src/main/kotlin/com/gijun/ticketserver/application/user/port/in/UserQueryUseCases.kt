@@ -1,4 +1,8 @@
 package com.gijun.ticketserver.application.user.port.`in`
 
-class UserQueryUseCases {
+import com.gijun.ticketserver.application.user.dto.GetUserQuery
+import com.gijun.ticketserver.application.user.dto.UserResult
+
+interface UserQueryUseCases {
+    fun getById(query: GetUserQuery): UserResult
 }
