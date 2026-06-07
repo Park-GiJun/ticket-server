@@ -1,7 +1,7 @@
 package com.gijun.ticketserver.application.user.port.out
 
 import com.gijun.ticketserver.domain.model.UserModel
-import com.gijun.ticketserver.domain.model.UserRole
+import com.gijun.ticketserver.domain.enums.UserRole
 
 /**
  * 인증 토큰 발급/검증 포트. application 레이어가 특정 JWT 라이브러리에 의존하지 않도록 분리한다.

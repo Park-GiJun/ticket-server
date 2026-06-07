@@ -4,7 +4,7 @@ import com.gijun.ticketserver.application.user.port.out.IssuedToken
 import com.gijun.ticketserver.application.user.port.out.TokenPayload
 import com.gijun.ticketserver.application.user.port.out.UserTokenPort
 import com.gijun.ticketserver.domain.model.UserModel
-import com.gijun.ticketserver.domain.model.UserRole
+import com.gijun.ticketserver.domain.enums.UserRole
 import com.gijun.ticketserver.infrastructure.security.JwtProperties
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts

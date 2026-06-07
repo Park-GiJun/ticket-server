@@ -2,7 +2,7 @@ package com.gijun.ticketserver.domain.service
 
 import com.gijun.ticketserver.domain.exception.UserException
 import com.gijun.ticketserver.domain.model.UserModel
-import com.gijun.ticketserver.domain.model.UserRole
+import com.gijun.ticketserver.domain.enums.UserRole
 
 /**
  * 사용자 도메인 규칙(이메일/비밀번호 정책, 생성 불변식)을 담당한다.

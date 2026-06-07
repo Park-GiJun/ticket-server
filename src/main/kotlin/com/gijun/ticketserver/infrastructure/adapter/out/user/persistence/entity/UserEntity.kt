@@ -1,8 +1,8 @@
 package com.gijun.ticketserver.infrastructure.adapter.out.user.persistence.entity
 
 import com.gijun.ticketserver.domain.model.UserModel
-import com.gijun.ticketserver.domain.model.UserRole
-import com.gijun.ticketserver.domain.model.UserStatus
+import com.gijun.ticketserver.domain.enums.UserRole
+import com.gijun.ticketserver.domain.enums.UserStatus
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType

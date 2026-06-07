@@ -1,8 +1,8 @@
 package com.gijun.ticketserver.application.user.dto
 
 import com.gijun.ticketserver.domain.model.UserModel
-import com.gijun.ticketserver.domain.model.UserRole
-import com.gijun.ticketserver.domain.model.UserStatus
+import com.gijun.ticketserver.domain.enums.UserRole
+import com.gijun.ticketserver.domain.enums.UserStatus
 import java.time.Instant
 
 data class UserResult(

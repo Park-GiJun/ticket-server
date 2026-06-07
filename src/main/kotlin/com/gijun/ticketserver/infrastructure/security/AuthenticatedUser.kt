@@ -1,6 +1,6 @@
 package com.gijun.ticketserver.infrastructure.security
 
-import com.gijun.ticketserver.domain.model.UserRole
+import com.gijun.ticketserver.domain.enums.UserRole
 
 /**
  * 인증된 요청의 SecurityContext 에 보관되는 주체(principal).
