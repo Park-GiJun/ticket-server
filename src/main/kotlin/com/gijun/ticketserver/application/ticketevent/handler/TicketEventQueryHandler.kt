@@ -1,12 +1,11 @@
 package com.gijun.ticketserver.application.ticketevent.handler
 
+import com.gijun.ticketserver.application.ticketevent.dto.SearchTicketEventsQuery
+import com.gijun.ticketserver.application.ticketevent.dto.TicketEventResult
 import com.gijun.ticketserver.application.ticketevent.port.`in`.GetTicketEventUseCase
 import com.gijun.ticketserver.application.ticketevent.port.`in`.SearchTicketEventsUseCase
 import com.gijun.ticketserver.application.ticketevent.port.out.TicketEventPersistencePort
-import com.gijun.ticketserver.domain.enums.TicketEventCategory
-import com.gijun.ticketserver.domain.enums.TicketEventStatus
 import com.gijun.ticketserver.domain.exception.TicketEventException
-import com.gijun.ticketserver.domain.model.TicketEventModel
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -17,13 +16,13 @@ class TicketEventQueryHandler(
 ) : GetTicketEventUseCase,
     SearchTicketEventsUseCase {
 
-    override fun getById(id: Long): TicketEventModel =
-        ticketEventPersistencePort.findById(id)
+    override fun getById(id: Long): TicketEventResult {
+        val model = ticketEventPersistencePort.findById(id)
             ?: throw TicketEventException.TicketEventNotFound()
+        return TicketEventResult.from(model)
+    }
 
-    override fun search(
-        category: TicketEventCategory?,
-        status: TicketEventStatus?,
-    ): List<TicketEventModel> =
-        ticketEventPersistencePort.search(category, status)
+    override fun search(query: SearchTicketEventsQuery): List<TicketEventResult> =
+        ticketEventPersistencePort.search(query.category, query.status)
+            .map { TicketEventResult.from(it) }
 }
