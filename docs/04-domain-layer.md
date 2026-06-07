@@ -6,10 +6,17 @@
 
 `domain/model/UserModel.kt`
 
+> `UserRole`/`UserStatus` enum 은 `domain/enums/` 패키지의 독립 파일로 분리돼 있다
+> (`domain/enums/UserRole.kt`, `domain/enums/UserStatus.kt`). 도메인 전반에서 공유하는
+> 값 타입을 모델 파일과 분리해 재사용·가독성을 높였다.
+
 ```kotlin
+// domain/enums/UserRole.kt
 enum class UserRole { USER, ADMIN }
+// domain/enums/UserStatus.kt
 enum class UserStatus { ACTIVE, INACTIVE, LOCKED }
 
+// domain/model/UserModel.kt
 data class UserModel(
     val id: Long? = null,
     val email: String,

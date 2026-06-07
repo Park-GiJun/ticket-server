@@ -48,7 +48,8 @@ com.gijun.ticketserver
 ├─ TicketServerApplication.kt            # @SpringBootApplication, @ConfigurationPropertiesScan
 │
 ├─ domain                                 # [순수] 비즈니스 핵심
-│  ├─ model/UserModel.kt                  #   UserModel, UserRole, UserStatus
+│  ├─ enums/                              #   도메인 공유 enum (UserRole, UserStatus, TicketEvent*)
+│  ├─ model/UserModel.kt                  #   UserModel
 │  ├─ service/UserDomainService.kt        #   도메인 규칙(이메일/비밀번호 정책)
 │  └─ exception/UserException.kt          #   sealed 도메인 예외
 │
@@ -75,14 +76,14 @@ com.gijun.ticketserver
    │   ├─ memory/UserMemoryAdapter.kt     #     Redis
    │   ├─ message/UserMessageAdapter.kt   #     Kafka
    │   └─ token/JwtTokenProvider.kt       #     JWT (UserTokenPort 구현)
-   ├─ security/                           #   프레임워크 보안 인프라
-   │   ├─ JwtAuthenticationFilter.kt
-   │   ├─ JwtProperties.kt
-   │   └─ AuthenticatedUser.kt
    └─ config/                             #   설정
        ├─ GlobalExceptionHandler.kt
        ├─ OpenApiConfig.kt                #     Swagger/OpenAPI
-       └─ security/SecurityConfig.kt      #     Spring Security 설정
+       └─ security/                       #     보안 설정 + 전역 보안 인프라
+           ├─ SecurityConfig.kt           #       Spring Security 설정
+           ├─ JwtAuthenticationFilter.kt
+           ├─ JwtProperties.kt
+           └─ AuthenticatedUser.kt
 ```
 
 ## 어댑터 배치 규칙
@@ -99,4 +100,5 @@ com.gijun.ticketserver
 > `JwtTokenProvider` 는 처음 `infrastructure/security` 에 두었다가, **out 포트 구현체라는 점에서
 > 다른 어댑터와 동일한 규칙(`adapter/out/user/token`)으로 이동**해 일관성을 맞췄다.
 > 반면 `JwtAuthenticationFilter`/`JwtProperties`/`AuthenticatedUser` 는 특정 포트의 어댑터가 아니라
-> **웹 보안 전역 인프라**이므로 `security` 패키지에 유지한다.
+> **웹 보안 전역 인프라**이다. 이들은 처음 `infrastructure/security` 에 흩어져 있었으나,
+> `SecurityConfig` 와 같은 보안 관심사이므로 **`config/security/` 한 곳으로 모아** 응집도를 높였다.
