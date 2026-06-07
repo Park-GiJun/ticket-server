@@ -3,7 +3,7 @@
 티켓 예매 서버(`ticket-server`)의 설계·구현 문서 모음입니다.
 현재까지는 **사용자(User) 도메인의 인증 기능**(회원가입 / 로그인 / 비밀번호 재설정)을
 헥사고날 아키텍처 + CQRS 구조로 구현했고, **티켓 이벤트(Ticket Event) 도메인**은
-도메인 모델·영속성 계층·유스케이스 인터페이스까지 추가한 단계입니다.
+도메인부터 REST API(생성/수정/상태전이/조회)까지 한 벌을 구현한 단계입니다.
 
 > ⚠️ 이 문서들은 **작업 기록(working notes)** 입니다. 추후 포트폴리오용으로 재구성할 예정입니다.
 
@@ -37,13 +37,12 @@
 
 ### Ticket Event 도메인
 
-> ⚠️ 도메인 모델 + 영속성 계층 + 유스케이스 인터페이스까지 구현됨(핸들러·웹 API 미구현).
-
 | # | 문서 | 내용 |
 |---|------|------|
 | 11 | [도메인 레이어](./11-ticket-event-domain-layer.md) | `TicketEventModel`, 예매 일정 불변식, 상태/카테고리 enum |
-| 12 | [애플리케이션 레이어](./12-ticket-event-application-layer.md) | 인바운드 유스케이스 인터페이스 + 아웃바운드 포트(영속성) — 핸들러/DTO 예정 |
+| 12 | [애플리케이션 레이어](./12-ticket-event-application-layer.md) | 유스케이스(in)·영속성 포트(out), DTO, 핸들러 |
 | 13 | [인프라스트럭처 레이어](./13-ticket-event-infrastructure-layer.md) | JPA 엔티티/리포지토리/어댑터 |
+| 14 | [API 레퍼런스](./14-ticket-event-api-reference.md) | 엔드포인트, 요청/응답, 상태 전이, 에러 코드 |
 
 ---
 
@@ -83,12 +82,12 @@ NN-{domain}-flows.md                 # (선택) 주요 시퀀스
 - 내 정보 조회 (`GET /api/users/me`, 인증 필요)
 - JWT 기반 Stateless 인증, BCrypt 비밀번호 해싱
 - 전역 예외 처리, 요청 검증(Bean Validation)
-- 티켓 이벤트(공연/경기) 도메인 모델·영속성 계층 및 유스케이스 인터페이스(CRUD/상태전이/조회)
+- 티켓 이벤트(공연/경기) CRUD·상태전이(오픈/마감/취소)·조회 REST API (`/api/ticket-events`)
 
 ## 🗺️ 앞으로 (예정)
 
-- 티켓 이벤트 핸들러 구현 / DTO / 웹 API (현재 도메인·영속성·유스케이스 인터페이스까지 구현)
-- 예매(booking) 도메인
+- 티켓 이벤트 구역(`ticketEventSection`)·좌석(`ticketEventSeats`)·예매(`ticketEventReservation`) 도메인
+- 권한 기반 인가(티켓 이벤트 생성/수정은 ADMIN 전용 등)
 - Refresh Token, 로그아웃(토큰 블랙리스트)
 - 권한 기반 인가(ADMIN 전용 API)
 - Flyway 마이그레이션 전환, 테스트 코드(Kotest + Testcontainers)

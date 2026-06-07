@@ -35,11 +35,24 @@ class TicketEventEntity(
 ### TicketEventPersistenceRepository (`repository/`)
 
 ```kotlin
-interface TicketEventPersistenceRepository : JpaRepository<TicketEventEntity, Long>
+interface TicketEventPersistenceRepository : JpaRepository<TicketEventEntity, Long> {
+
+    @Query(
+        """
+        SELECT t FROM TicketEventEntity t
+        WHERE (:category IS NULL OR t.ticketEventCategory = :category)
+          AND (:status IS NULL OR t.ticketEventStatus = :status)
+        """,
+    )
+    fun search(
+        @Param("category") category: TicketEventCategory?,
+        @Param("status") status: TicketEventStatus?,
+    ): List<TicketEventEntity>
+}
 ```
 
-> 아직 식별자 기반 기본 메서드(`findById`/`existsById`/`save`)만 사용한다.
-> 도메인 고유 조회가 필요해지면 쿼리 메서드를 추가한다.
+> 식별자 기반 기본 메서드(`findById`/`existsById`/`save`)에 더해, 카테고리/상태 필터
+> 조회용 `search` 를 **null-safe JPQL**(파라미터가 null 이면 해당 조건 무시)로 추가했다.
 
 ### TicketEventPersistenceAdapter (`adapter/`)
 
