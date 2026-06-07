@@ -80,8 +80,9 @@ com.gijun.ticketserver
    │   ├─ JwtProperties.kt
    │   └─ AuthenticatedUser.kt
    └─ config/                             #   설정
-       ├─ SecurityConfig.kt
-       └─ GlobalExceptionHandler.kt
+       ├─ GlobalExceptionHandler.kt
+       ├─ OpenApiConfig.kt                #     Swagger/OpenAPI
+       └─ security/SecurityConfig.kt      #     Spring Security 설정
 ```
 
 ## 어댑터 배치 규칙

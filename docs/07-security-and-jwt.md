@@ -2,7 +2,7 @@
 
 ## Spring Security 설정
 
-`infrastructure/config/SecurityConfig.kt`
+`infrastructure/config/security/SecurityConfig.kt`
 
 ```kotlin
 @Configuration
