@@ -8,19 +8,24 @@
 
 `application/user/port/in/`
 
-```kotlin
-interface UserCommandUseCases {
-    fun register(command: RegisterUserCommand): UserResult
-    fun login(command: LoginCommand): TokenResult
-    fun requestPasswordReset(command: RequestPasswordResetCommand)
-    fun resetPassword(command: ResetPasswordCommand)
-}
+유스케이스는 **1 인터페이스 = 1 함수** 규칙을 따른다. 명령/조회 인터페이스를
+각각 `UserCommandUseCases.kt` / `UserQueryUseCases.kt` 파일에 모아 둔다.
 
-interface UserQueryUseCases {
-    fun getById(query: GetUserQuery): UserResult
-}
+```kotlin
+// UserCommandUseCases.kt — 명령(Command) 유스케이스
+interface RegisterUserUseCase { fun register(command: RegisterUserCommand): UserResult }
+interface LoginUseCase { fun login(command: LoginCommand): TokenResult }
+interface RequestPasswordResetUseCase { fun requestPasswordReset(command: RequestPasswordResetCommand) }
+interface ResetPasswordUseCase { fun resetPassword(command: ResetPasswordCommand) }
+
+// UserQueryUseCases.kt — 조회(Query) 유스케이스
+interface GetUserUseCase { fun getById(query: GetUserQuery): UserResult }
 ```
 
+> **1 인터페이스 = 1 함수**: 유스케이스 단위로 인터페이스를 잘게 나눠 의존을 명시적으로
+> 표현한다. 한 핸들러가 같은 그룹의 여러 유스케이스를 구현하고(예: `UserCommandHandler`
+> 가 명령 유스케이스 4개 구현), 웹 어댑터는 자신이 실제로 쓰는 유스케이스만 주입받는다.
+>
 > 패키지명 `in` 은 Kotlin 예약어라 백틱(`` `in` ``)으로 선언/임포트한다.
 
 ### 아웃바운드 (out-port)
@@ -76,7 +81,8 @@ interface UserTokenPort {
 
 ### UserCommandHandler
 
-`@Service @Transactional`, `UserCommandUseCases` 구현.
+`@Service @Transactional`, 명령 유스케이스 4개(`RegisterUserUseCase`, `LoginUseCase`,
+`RequestPasswordResetUseCase`, `ResetPasswordUseCase`)를 함께 구현.
 
 의존: `UserPersistencePort`, `UserMemoryPort`, `UserMessagePort`, `UserTokenPort`,
 `PasswordEncoder`(Spring Security), `UserDomainService`(기본값 주입).
@@ -110,5 +116,5 @@ override fun login(command: LoginCommand): TokenResult {
 
 ### UserQueryHandler
 
-`@Service @Transactional(readOnly = true)`, `UserQueryUseCases` 구현.
+`@Service @Transactional(readOnly = true)`, `GetUserUseCase` 구현.
 `getById` 로 사용자를 조회하고 없으면 `UserNotFound`.

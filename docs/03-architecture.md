@@ -36,10 +36,14 @@
 
 명령(Command)과 조회(Query)를 분리한다.
 
-| 구분 | in-port | Handler | 트랜잭션 |
+| 구분 | in-port (유스케이스) | Handler | 트랜잭션 |
 |------|---------|---------|----------|
-| Command | `UserCommandUseCases` | `UserCommandHandler` | `@Transactional` |
-| Query | `UserQueryUseCases` | `UserQueryHandler` | `@Transactional(readOnly = true)` |
+| Command | `RegisterUserUseCase` / `LoginUseCase` / `RequestPasswordResetUseCase` / `ResetPasswordUseCase` | `UserCommandHandler` | `@Transactional` |
+| Query | `GetUserUseCase` | `UserQueryHandler` | `@Transactional(readOnly = true)` |
+
+> 유스케이스는 **1 인터페이스 = 1 함수** 규칙을 따른다. 한 핸들러가 같은 그룹의 여러
+> 유스케이스 인터페이스를 구현하며, 명령/조회 인터페이스는 각각
+> `UserCommandUseCases.kt` / `UserQueryUseCases.kt` 파일에 모은다. → [05](./05-application-layer.md)
 
 ## 패키지 구조
 
