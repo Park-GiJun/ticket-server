@@ -1,0 +1,27 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: ticket-event-service
+
+  # === Datasource (dev: H2, PostgreSQL 호환 모드) ===
+  datasource:
+    url: jdbc:h2:mem:ticketevent;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: ""
+
+  # === JPA / Hibernate ===
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+# === Service Discovery ===
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

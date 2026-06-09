@@ -14,3 +14,11 @@ dependencyResolutionManagement {
         google()
     }
 }
+
+include(
+    "common",
+    "discovery-server",
+    "gateway",
+    "user-service",
+    "ticket-event-service",
+)
