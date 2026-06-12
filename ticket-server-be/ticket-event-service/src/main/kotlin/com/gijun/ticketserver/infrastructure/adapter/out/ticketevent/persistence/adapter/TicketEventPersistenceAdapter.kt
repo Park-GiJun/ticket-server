@@ -1,6 +1,6 @@
 package com.gijun.ticketserver.infrastructure.adapter.out.ticketevent.persistence.adapter
 
-import com.gijun.ticketserver.application.ticketevent.port.out.TicketEventPersistencePort
+import com.gijun.ticketserver.application.ticketevent.port.out.persistence.TicketEventPersistencePort
 import com.gijun.ticketserver.domain.enums.TicketEventCategory
 import com.gijun.ticketserver.domain.enums.TicketEventStatus
 import com.gijun.ticketserver.domain.model.TicketEventModel
@@ -39,6 +39,7 @@ class TicketEventPersistenceAdapter(
         ticketClosedAt = model.ticketClosedAt
         ticketEventAt = model.ticketEventAt
         ticketEventStatus = model.ticketEventStatus
+        ticketCreationStatus = model.ticketCreationStatus
         ticketEventCategory = model.ticketEventCategory
     }
 }

@@ -1,4 +1,4 @@
-package com.gijun.ticketserver.application.ticketevent.port.out
+package com.gijun.ticketserver.application.ticketevent.port.out.persistence
 
 import com.gijun.ticketserver.domain.enums.TicketEventCategory
 import com.gijun.ticketserver.domain.enums.TicketEventStatus

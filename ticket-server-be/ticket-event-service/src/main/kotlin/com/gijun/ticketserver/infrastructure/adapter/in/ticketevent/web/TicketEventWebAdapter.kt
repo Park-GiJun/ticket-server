@@ -1,16 +1,23 @@
 package com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web
 
-import com.gijun.ticketserver.application.ticketevent.dto.SearchTicketEventsQuery
-import com.gijun.ticketserver.application.ticketevent.port.`in`.CancelTicketEventUseCase
-import com.gijun.ticketserver.application.ticketevent.port.`in`.CloseTicketEventUseCase
-import com.gijun.ticketserver.application.ticketevent.port.`in`.CreateTicketEventUseCase
-import com.gijun.ticketserver.application.ticketevent.port.`in`.GetTicketEventUseCase
-import com.gijun.ticketserver.application.ticketevent.port.`in`.OpenTicketEventUseCase
-import com.gijun.ticketserver.application.ticketevent.port.`in`.SearchTicketEventsUseCase
-import com.gijun.ticketserver.application.ticketevent.port.`in`.UpdateTicketEventUseCase
+import com.gijun.ticketserver.application.ticketevent.dto.command.CreateSeatsCommand
+import com.gijun.ticketserver.application.ticketevent.dto.query.SearchTicketEventsQuery
+import com.gijun.ticketserver.application.ticketevent.port.`in`.command.CancelTicketEventUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.command.CloseTicketEventUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.command.CompleteTicketEventCreationUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.command.CreateSeatsUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.command.CreateSectionsUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.command.CreateTicketEventUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.query.GetTicketEventUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.command.OpenTicketEventUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.query.SearchTicketEventsUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.command.UpdateTicketEventUseCase
 import com.gijun.ticketserver.domain.enums.TicketEventCategory
 import com.gijun.ticketserver.domain.enums.TicketEventStatus
+import com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web.dto.CreateSectionsRequest
 import com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web.dto.CreateTicketEventRequest
+import com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web.dto.SeatCreationResponse
+import com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web.dto.SectionCreationResponse
 import com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web.dto.TicketEventResponse
 import com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web.dto.UpdateTicketEventRequest
 import com.gijun.ticketserver.infrastructure.config.OpenApiConfig
@@ -41,6 +48,9 @@ class TicketEventWebAdapter(
     private val openTicketEventUseCase: OpenTicketEventUseCase,
     private val closeTicketEventUseCase: CloseTicketEventUseCase,
     private val cancelTicketEventUseCase: CancelTicketEventUseCase,
+    private val createSectionsUseCase: CreateSectionsUseCase,
+    private val createSeatsUseCase: CreateSeatsUseCase,
+    private val completeTicketEventCreationUseCase: CompleteTicketEventCreationUseCase,
     private val getTicketEventUseCase: GetTicketEventUseCase,
     private val searchTicketEventsUseCase: SearchTicketEventsUseCase,
 ) {
@@ -98,6 +108,51 @@ class TicketEventWebAdapter(
     @PostMapping("/{id}/cancel")
     fun cancel(@PathVariable id: Long): TicketEventResponse =
         TicketEventResponse.from(cancelTicketEventUseCase.cancel(id))
+
+    @Operation(
+        summary = "구역 생성 (셋업 2단계)",
+        description = "이벤트에 좌석 구역을 일괄 등록한다. 생성 단계 EVENT_CREATED → SECTION_CREATED.",
+    )
+    @ApiResponses(
+        ApiResponse(responseCode = "201", description = "생성 성공"),
+        ApiResponse(responseCode = "400", description = "요청 값 검증 실패"),
+        ApiResponse(responseCode = "404", description = "티켓 이벤트 없음"),
+        ApiResponse(responseCode = "409", description = "허용되지 않는 생성 단계 전이"),
+    )
+    @PostMapping("/{id}/sections")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createSections(
+        @PathVariable id: Long,
+        @Valid @RequestBody request: CreateSectionsRequest,
+    ): SectionCreationResponse =
+        SectionCreationResponse.from(createSectionsUseCase.createSections(request.toCommand(id)))
+
+    @Operation(
+        summary = "좌석 생성 (셋업 3단계)",
+        description = "각 구역의 capacity 만큼 좌석을 자동 생성한다. 생성 단계 SECTION_CREATED → SEAT_CREATED.",
+    )
+    @ApiResponses(
+        ApiResponse(responseCode = "201", description = "생성 성공"),
+        ApiResponse(responseCode = "404", description = "티켓 이벤트/구역 없음"),
+        ApiResponse(responseCode = "409", description = "허용되지 않는 생성 단계 전이"),
+    )
+    @PostMapping("/{id}/seats")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createSeats(@PathVariable id: Long): SeatCreationResponse =
+        SeatCreationResponse.from(createSeatsUseCase.createSeats(CreateSeatsCommand(id)))
+
+    @Operation(
+        summary = "셋업 완료 (4단계)",
+        description = "좌석 생성까지 끝난 이벤트의 셋업을 완료한다. 생성 단계 SEAT_CREATED → COMPLETED.",
+    )
+    @ApiResponses(
+        ApiResponse(responseCode = "200", description = "완료 성공"),
+        ApiResponse(responseCode = "404", description = "티켓 이벤트 없음"),
+        ApiResponse(responseCode = "409", description = "허용되지 않는 생성 단계 전이"),
+    )
+    @PostMapping("/{id}/complete")
+    fun complete(@PathVariable id: Long): TicketEventResponse =
+        TicketEventResponse.from(completeTicketEventCreationUseCase.complete(id))
 
     @Operation(summary = "티켓 이벤트 단건 조회", description = "ID 로 티켓 이벤트를 조회한다.")
     @ApiResponses(

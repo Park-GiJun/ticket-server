@@ -1,10 +1,10 @@
-package com.gijun.ticketserver.application.ticketevent.handler
+package com.gijun.ticketserver.application.ticketevent.handler.query
 
-import com.gijun.ticketserver.application.ticketevent.dto.SearchTicketEventsQuery
-import com.gijun.ticketserver.application.ticketevent.dto.TicketEventResult
-import com.gijun.ticketserver.application.ticketevent.port.`in`.GetTicketEventUseCase
-import com.gijun.ticketserver.application.ticketevent.port.`in`.SearchTicketEventsUseCase
-import com.gijun.ticketserver.application.ticketevent.port.out.TicketEventPersistencePort
+import com.gijun.ticketserver.application.ticketevent.dto.query.SearchTicketEventsQuery
+import com.gijun.ticketserver.application.ticketevent.dto.result.TicketEventResult
+import com.gijun.ticketserver.application.ticketevent.port.`in`.query.GetTicketEventUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.query.SearchTicketEventsUseCase
+import com.gijun.ticketserver.application.ticketevent.port.out.persistence.TicketEventPersistencePort
 import com.gijun.ticketserver.domain.exception.TicketEventException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

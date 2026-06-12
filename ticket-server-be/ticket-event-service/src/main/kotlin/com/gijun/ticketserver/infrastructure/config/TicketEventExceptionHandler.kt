@@ -14,7 +14,10 @@ class TicketEventExceptionHandler {
     fun handleTicketEventException(e: TicketEventException): ResponseEntity<ApiErrorResponse> {
         val status = when (e) {
             is TicketEventException.TicketEventNotFound -> HttpStatus.NOT_FOUND
+            is TicketEventException.SectionNotFound -> HttpStatus.NOT_FOUND
+            is TicketEventException.SeatNotFound -> HttpStatus.NOT_FOUND
             is TicketEventException.InvalidStatusTransition -> HttpStatus.CONFLICT
+            is TicketEventException.InvalidSeatStatusTransition -> HttpStatus.CONFLICT
         }
         return ResponseEntity.status(status)
             .body(ApiErrorResponse(status.value(), e.message ?: status.reasonPhrase))

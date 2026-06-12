@@ -6,4 +6,7 @@ package com.gijun.ticketserver.domain.exception
 sealed class TicketEventException(message: String) : RuntimeException(message) {
     class TicketEventNotFound : TicketEventException("티켓 이벤트를 찾을 수 없습니다")
     class InvalidStatusTransition(reason: String) : TicketEventException(reason)
+    class SectionNotFound : TicketEventException("좌석 구역을 찾을 수 없습니다")
+    class SeatNotFound : TicketEventException("좌석을 찾을 수 없습니다")
+    class InvalidSeatStatusTransition(reason: String) : TicketEventException(reason)
 }

@@ -1,5 +1,6 @@
 package com.gijun.ticketserver.infrastructure.adapter.out.ticketevent.persistence.entity
 
+import com.gijun.ticketserver.domain.enums.TicketCreationStatus
 import com.gijun.ticketserver.domain.enums.TicketEventCategory
 import com.gijun.ticketserver.domain.enums.TicketEventStatus
 import com.gijun.ticketserver.domain.model.TicketEventModel
@@ -40,6 +41,10 @@ class TicketEventEntity(
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
+    var ticketCreationStatus: TicketCreationStatus,
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     var ticketEventCategory: TicketEventCategory,
 
     @CreationTimestamp
@@ -57,6 +62,7 @@ class TicketEventEntity(
         ticketClosedAt = ticketClosedAt,
         ticketEventAt = ticketEventAt,
         ticketEventStatus = ticketEventStatus,
+        ticketCreationStatus = ticketCreationStatus,
         ticketEventCategory = ticketEventCategory,
         createdAt = createdAt,
         updatedAt = updatedAt,
@@ -70,6 +76,7 @@ class TicketEventEntity(
             ticketClosedAt = model.ticketClosedAt,
             ticketEventAt = model.ticketEventAt,
             ticketEventStatus = model.ticketEventStatus,
+            ticketCreationStatus = model.ticketCreationStatus,
             ticketEventCategory = model.ticketEventCategory,
         )
     }
