@@ -11,6 +11,7 @@ import com.gijun.ticketserver.application.ticketevent.port.`in`.UpdateTicketEven
 import com.gijun.ticketserver.application.ticketevent.port.out.TicketEventPersistencePort
 import com.gijun.ticketserver.domain.exception.TicketEventException
 import com.gijun.ticketserver.domain.model.TicketEventModel
+import com.gijun.ticketserver.domain.service.TicketEventDomainService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class TicketEventCommandHandler(
     private val ticketEventPersistencePort: TicketEventPersistencePort,
+    private val ticketEventDomainService: TicketEventDomainService = TicketEventDomainService(),
 ) : CreateTicketEventUseCase,
     UpdateTicketEventUseCase,
     OpenTicketEventUseCase,
@@ -25,7 +27,7 @@ class TicketEventCommandHandler(
     CancelTicketEventUseCase {
 
     override fun create(command: CreateTicketEventCommand): TicketEventResult {
-        val model = TicketEventModel(
+        val model = ticketEventDomainService.create(
             ticketEventName = command.ticketEventName,
             ticketOpenAt = command.ticketOpenAt,
             ticketClosedAt = command.ticketClosedAt,
@@ -36,10 +38,10 @@ class TicketEventCommandHandler(
     }
 
     override fun update(command: UpdateTicketEventCommand): TicketEventResult {
-        // 상태/생성시각은 보존하고 편집 가능한 필드만 갱신한다(상태는 open/close/cancel 로만 전이).
         val existing = ticketEventPersistencePort.findById(command.id)
             ?: throw TicketEventException.TicketEventNotFound()
-        val updated = existing.copy(
+        val updated = ticketEventDomainService.update(
+            existing = existing,
             ticketEventName = command.ticketEventName,
             ticketOpenAt = command.ticketOpenAt,
             ticketClosedAt = command.ticketClosedAt,

@@ -1,9 +1,10 @@
 # ticket-server 문서 인덱스
 
 티켓 예매 서버(`ticket-server`)의 설계·구현 문서 모음입니다.
-현재까지는 **사용자(User) 도메인의 인증 기능**(회원가입 / 로그인 / 비밀번호 재설정)을
-헥사고날 아키텍처 + CQRS 구조로 구현했고, **티켓 이벤트(Ticket Event) 도메인**은
-도메인부터 REST API(생성/수정/상태전이/조회)까지 한 벌을 구현한 단계입니다.
+**Spring Cloud(Eureka + Gateway) 기반 MSA** 로 구성했고, 각 서비스 내부는 헥사고날 아키텍처 + CQRS 입니다.
+현재까지는 **사용자(User) 도메인의 인증 기능**(회원가입 / 로그인 / 비밀번호 재설정)과,
+**티켓 이벤트(Ticket Event) 도메인**의 도메인부터 REST API(생성/수정/상태전이/조회)까지 한 벌,
+그리고 **게이트웨이 단일 인증**(JWT 검증·신원 헤더 전달)을 구현한 단계입니다.
 
 > ⚠️ 이 문서들은 **작업 기록(working notes)** 입니다. 추후 포트폴리오용으로 재구성할 예정입니다.
 
@@ -69,8 +70,11 @@ NN-{domain}-flows.md                 # (선택) 주요 시퀀스
 
 - **목적**: 티켓 예매 서버 (현재는 사용자 인증 기반 구축 단계)
 - **언어/런타임**: Kotlin 2.3.20 / JDK 25
-- **프레임워크**: Spring Boot 4.0.6 (Spring Framework 7, Spring Security 7)
-- **아키텍처**: 헥사고날(Ports & Adapters) + CQRS
+- **프레임워크**: Spring Boot 4.0.6 (Spring Framework 7, Spring Security 7) + Spring Cloud 2025.1.x
+- **시스템 구조**: MSA — `discovery-server`(Eureka, 8761) / `gateway`(8080, 단일 인증 지점) /
+  `user-service`(8081) / `ticket-event-service`(8082) / `common`(공유 라이브러리).
+  빌드 루트는 `ticket-server-be/`. → [03 아키텍처](./03-architecture.md)
+- **서비스 내부 아키텍처**: 헥사고날(Ports & Adapters) + CQRS
 - **영속성**: JPA(Hibernate) + PostgreSQL (로컬은 H2)
 - **부가 인프라**: Redis(토큰 저장), Kafka(이벤트 발행), Elasticsearch(예정)
 
@@ -83,11 +87,13 @@ NN-{domain}-flows.md                 # (선택) 주요 시퀀스
 - JWT 기반 Stateless 인증, BCrypt 비밀번호 해싱
 - 전역 예외 처리, 요청 검증(Bean Validation)
 - 티켓 이벤트(공연/경기) CRUD·상태전이(오픈/마감/취소)·조회 REST API (`/api/ticket-events`)
+- MSA 분리: Eureka 서비스 디스커버리 + Gateway 라우팅
+- 게이트웨이 단일 인증(JWT 검증 후 `X-User-*` 신원 헤더 전달)
 
 ## 🗺️ 앞으로 (예정)
 
 - 티켓 이벤트 구역(`ticketEventSection`)·좌석(`ticketEventSeats`)·예매(`ticketEventReservation`) 도메인
+- 다운스트림 서비스에서 게이트웨이 전달 `X-User-*` 신원 헤더 소비(현재는 미사용)
 - 권한 기반 인가(티켓 이벤트 생성/수정은 ADMIN 전용 등)
 - Refresh Token, 로그아웃(토큰 블랙리스트)
-- 권한 기반 인가(ADMIN 전용 API)
 - Flyway 마이그레이션 전환, 테스트 코드(Kotest + Testcontainers)
