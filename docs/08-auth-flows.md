@@ -28,13 +28,18 @@ Client ──POST /api/auth/login──> UserWebAdapter
         <── 200 OK + TokenResponse(accessToken, "Bearer", expiresIn)
 ```
 
-이후 보호된 API 호출:
+이후 보호된 API 호출 (MSA: 게이트웨이 경유):
 
 ```
-Client ──GET /api/users/me  (Authorization: Bearer <token>)──> JwtAuthenticationFilter
-   └─ validateToken ──> SecurityContext(AuthenticatedUser)
-        └─> UserWebAdapter.me ──> UserQueryHandler.getById ──> 200 UserResponse
+Client ──GET /api/users/me  (Authorization: Bearer <token>)
+   └─> gateway(JwtAuthGatewayFilter): 검증 실패 → 401 / 성공 → X-User-* 부착 후 라우팅
+        └─> user-service: JwtAuthenticationFilter 가 Bearer 토큰을 재검증
+              └─ SecurityContext(AuthenticatedUser)
+                   └─> UserWebAdapter.me ──> UserQueryHandler.getById ──> 200 UserResponse
 ```
+
+> 게이트웨이와 user-service 가 **이중으로** 검증한다(게이트웨이 우회 직접 호출 방어).
+> `/api/auth/**` 발급 계열은 게이트웨이·user-service 양쪽에서 공개 경로다. → [07](./07-security-and-jwt.md)
 
 ## 3. 비밀번호 재설정 (Reset Password)
 

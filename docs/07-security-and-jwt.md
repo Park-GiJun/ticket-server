@@ -1,6 +1,28 @@
 # 07. 보안 & JWT
 
-## Spring Security 설정
+## 0. MSA 인증 모델 (게이트웨이 단일 인증)
+
+JWT **발급은 `user-service`**, **검증은 `gateway`** 가 맡는다. 양쪽은 `common` 모듈의
+`JwtTokenValidator`/`JwtProperties` 를 통해 **동일한 `jwt.secret`·`jwt.issuer`** 를 공유한다.
+바꿀 때는 gateway 와 user-service 의 `application.yml` 을 **함께** 수정해야 한다.
+
+```
+Client ──Bearer JWT──> gateway(JwtAuthGatewayFilter)
+   ├─ 공개 경로(/api/auth/**, /actuator/**) → 그대로 통과(위조 X-User-* 헤더는 제거)
+   ├─ 검증 실패/누락 → 401 {"status":401,"message":"인증이 필요합니다"}
+   └─ 검증 성공 → X-User-Id / X-User-Email / X-User-Role 헤더를 붙여 백엔드로 라우팅
+```
+
+- 게이트웨이 필터(`gateway/JwtAuthGatewayFilter.kt`)는 `OncePerRequestFilter` 로 최우선 순서(`HIGHEST_PRECEDENCE`)에
+  등록(`GatewaySecurityConfig`)된다. 클라이언트가 보낸 `X-User-*` 는 **신뢰하지 않고** 항상 덮어쓰거나 제거한다(`IdentityHeaderRequest`).
+- ⚠️ **현재 다운스트림 서비스는 이 `X-User-*` 헤더를 아직 소비하지 않는다.**
+  - `user-service` 는 자체 `SecurityConfig` + `JwtAuthenticationFilter` 로 **`Authorization` 토큰을 직접 재검증**하고
+    `@AuthenticationPrincipal AuthenticatedUser` 로 신원을 얻는다(아래 본문). 게이트웨이를 우회한 직접 호출도 막힌다.
+  - `ticket-event-service` 는 security 의존성이 없다(게이트웨이가 인증을 보장한다고 전제). 신원 헤더는 추후 사용 예정.
+
+아래 본문은 **`user-service` 내부의 발급·검증** 구현이다.
+
+## Spring Security 설정 (user-service)
 
 `infrastructure/config/security/SecurityConfig.kt`
 
@@ -75,8 +97,10 @@ override fun issueAccessToken(user: UserModel): IssuedToken {
 
 ### JwtProperties
 
-`infrastructure/security/JwtProperties.kt` — `@ConfigurationProperties(prefix = "jwt")`
-(`@ConfigurationPropertiesScan` 이 `TicketServerApplication` 에 선언됨)
+`common` 모듈의 `infrastructure/config/security/JwtProperties.kt` — `@ConfigurationProperties(prefix = "jwt")`.
+common 은 컴포넌트 스캔 범위 밖이라 모듈별로 명시 등록한다:
+- `user-service`: `UserServiceApplication` 의 `@ConfigurationPropertiesScan`.
+- `gateway`: `GatewaySecurityConfig` 의 `@EnableConfigurationProperties(JwtProperties::class)`.
 
 ```yaml
 jwt:
@@ -87,9 +111,9 @@ jwt:
 
 > ⚠️ HS256/512 서명 키는 **최소 32바이트(256bit)**. dev 기본값은 운영에서 반드시 교체.
 
-## 인증 필터 — JwtAuthenticationFilter
+## 인증 필터 — JwtAuthenticationFilter (user-service)
 
-`infrastructure/security/JwtAuthenticationFilter.kt` (`OncePerRequestFilter`)
+`infrastructure/config/security/JwtAuthenticationFilter.kt` (`OncePerRequestFilter`)
 
 ```kotlin
 resolveToken(request)                          // "Authorization: Bearer <token>"
