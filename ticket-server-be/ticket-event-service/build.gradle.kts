@@ -24,6 +24,8 @@ dependencies {
 
     // Testing
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.webmvc.test)
+    testImplementation(libs.spring.boot.resttestclient)
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotest.extensions.spring)
