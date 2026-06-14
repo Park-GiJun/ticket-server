@@ -1,9 +1,11 @@
 package com.gijun.ticketserver.application.ticketevent.dto.result
 
+import com.gijun.ticketserver.domain.enums.SeatStatus
 import com.gijun.ticketserver.domain.enums.TicketCreationStatus
 import com.gijun.ticketserver.domain.enums.TicketEventCategory
 import com.gijun.ticketserver.domain.enums.TicketEventStatus
 import com.gijun.ticketserver.domain.model.TicketEventModel
+import com.gijun.ticketserver.domain.model.TicketEventSeatModel
 import com.gijun.ticketserver.domain.model.TicketEventSectionModel
 import java.time.Instant
 
@@ -67,3 +69,50 @@ data class SeatCreationResult(
     val ticketEvent: TicketEventResult,
     val createdSeatCount: Int,
 )
+
+/** 좌석 1건 조회 결과. */
+data class TicketEventSeatResult(
+    val id: Long,
+    val sectionId: Long,
+    val ticketEventId: Long,
+    val rowLabel: String,
+    val seatNumber: Int,
+    val status: SeatStatus,
+) {
+    companion object {
+        fun from(model: TicketEventSeatModel): TicketEventSeatResult = TicketEventSeatResult(
+            id = requireNotNull(model.id) { "저장된 좌석에는 id 가 존재해야 합니다" },
+            sectionId = model.sectionId,
+            ticketEventId = model.ticketEventId,
+            rowLabel = model.rowLabel,
+            seatNumber = model.seatNumber,
+            status = model.status,
+        )
+    }
+}
+
+/**
+ * 이벤트의 좌석 잔여 현황. 상태별 좌석 수 집계와 그로부터 도출한 합계/잔여석을 함께 담는다.
+ *
+ * @property counts    상태별 좌석 수. 집계에 등장하지 않은 상태는 0 으로 채워진다.
+ * @property total     전체 좌석 수
+ * @property available 예매 가능(AVAILABLE) 좌석 수
+ */
+data class SeatAvailabilityResult(
+    val ticketEventId: Long,
+    val counts: Map<SeatStatus, Long>,
+    val total: Long,
+    val available: Long,
+) {
+    companion object {
+        fun from(ticketEventId: Long, counts: Map<SeatStatus, Long>): SeatAvailabilityResult {
+            val filled = SeatStatus.entries.associateWith { counts[it] ?: 0L }
+            return SeatAvailabilityResult(
+                ticketEventId = ticketEventId,
+                counts = filled,
+                total = filled.values.sum(),
+                available = filled[SeatStatus.AVAILABLE] ?: 0L,
+            )
+        }
+    }
+}

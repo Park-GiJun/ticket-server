@@ -1,9 +1,12 @@
 package com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web.dto
 
+import com.gijun.ticketserver.application.ticketevent.dto.result.SeatAvailabilityResult
 import com.gijun.ticketserver.application.ticketevent.dto.result.SeatCreationResult
 import com.gijun.ticketserver.application.ticketevent.dto.result.SectionCreationResult
 import com.gijun.ticketserver.application.ticketevent.dto.result.TicketEventResult
+import com.gijun.ticketserver.application.ticketevent.dto.result.TicketEventSeatResult
 import com.gijun.ticketserver.application.ticketevent.dto.result.TicketEventSectionResult
+import com.gijun.ticketserver.domain.enums.SeatStatus
 import com.gijun.ticketserver.domain.enums.TicketCreationStatus
 import com.gijun.ticketserver.domain.enums.TicketEventCategory
 import com.gijun.ticketserver.domain.enums.TicketEventStatus
@@ -79,6 +82,44 @@ data class SeatCreationResponse(
         fun from(result: SeatCreationResult): SeatCreationResponse = SeatCreationResponse(
             ticketEvent = TicketEventResponse.from(result.ticketEvent),
             createdSeatCount = result.createdSeatCount,
+        )
+    }
+}
+
+/** 좌석 1건 조회 응답. */
+data class TicketEventSeatResponse(
+    val id: Long,
+    val sectionId: Long,
+    val ticketEventId: Long,
+    val rowLabel: String,
+    val seatNumber: Int,
+    val status: SeatStatus,
+) {
+    companion object {
+        fun from(result: TicketEventSeatResult): TicketEventSeatResponse = TicketEventSeatResponse(
+            id = result.id,
+            sectionId = result.sectionId,
+            ticketEventId = result.ticketEventId,
+            rowLabel = result.rowLabel,
+            seatNumber = result.seatNumber,
+            status = result.status,
+        )
+    }
+}
+
+/** 좌석 잔여 현황 응답: 상태별 좌석 수 + 합계/잔여석. */
+data class SeatAvailabilityResponse(
+    val ticketEventId: Long,
+    val counts: Map<SeatStatus, Long>,
+    val total: Long,
+    val available: Long,
+) {
+    companion object {
+        fun from(result: SeatAvailabilityResult): SeatAvailabilityResponse = SeatAvailabilityResponse(
+            ticketEventId = result.ticketEventId,
+            counts = result.counts,
+            total = result.total,
+            available = result.available,
         )
     }
 }
