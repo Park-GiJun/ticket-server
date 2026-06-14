@@ -21,4 +21,5 @@ include(
     "gateway",
     "user-service",
     "ticket-event-service",
+    "reservation-service",
 )
