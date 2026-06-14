@@ -1,0 +1,201 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ---- 무대 ---- */
+.stageArea {
+  display: flex;
+  justify-content: center;
+}
+
+.stage {
+  width: 70%;
+  max-width: 480px;
+  padding: var(--space-3) var(--space-6);
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--color-text-secondary);
+  background: linear-gradient(
+    180deg,
+    var(--color-primary-100),
+    var(--color-primary-50)
+  );
+  border: 1px solid var(--color-primary-200);
+  border-radius: var(--radius-md) var(--radius-md) var(--radius-full)
+    var(--radius-full);
+}
+
+/* ---- 좌석 격자 (가로 스크롤 가능) ---- */
+.scrollArea {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: var(--space-2);
+  -webkit-overflow-scrolling: touch;
+}
+
+.grid {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 100%;
+  padding: var(--space-2);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rowLabel {
+  flex: 0 0 auto;
+  width: 24px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-tertiary);
+  user-select: none;
+}
+
+.rowSeats {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* ---- 개별 좌석 ---- */
+.seat {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    transform var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.seat:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.seat:disabled {
+  cursor: not-allowed;
+}
+
+/* status: AVAILABLE */
+.available {
+  background: var(--color-surface);
+  border-color: var(--color-primary-200);
+  color: var(--color-primary-dark);
+}
+
+/* status: HELD */
+.held {
+  background: var(--color-warning);
+  border-color: var(--color-warning);
+  color: #fff;
+  opacity: 0.45;
+}
+
+/* status: SOLD */
+.sold {
+  background: var(--color-border);
+  border-color: var(--color-border);
+  color: var(--color-text-tertiary);
+  opacity: 0.7;
+}
+
+/* status: BLOCKED */
+.blocked {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--color-bg-subtle),
+    var(--color-bg-subtle) 4px,
+    var(--color-border) 4px,
+    var(--color-border) 8px
+  );
+  border-color: var(--color-border);
+  color: transparent;
+}
+
+/* 선택됨 */
+.selected {
+  background: var(--color-primary);
+  border-color: var(--color-primary-dark);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.selected:not(:disabled):hover {
+  background: var(--color-primary-dark);
+}
+
+/* ---- 범례 ---- */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: 0;
+  padding: var(--space-4);
+  list-style: none;
+  background: var(--color-bg-subtle);
+  border-radius: var(--radius-md);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+.legendSwatch {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+/* ---- tablet ---- */
+@media (max-width: 1023px) {
+  .seat {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+  }
+}
+
+/* ---- mobile ---- */
+@media (max-width: 767px) {
+  .stage {
+    width: 100%;
+    letter-spacing: 0.2em;
+  }
+
+  .seat {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+  }
+
+  .legend {
+    gap: var(--space-3);
+  }
+}

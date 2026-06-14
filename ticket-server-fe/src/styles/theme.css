@@ -1,0 +1,75 @@
+:root {
+  /* ---- Primary (연보라) ---- */
+  --color-primary: #8b5cf6;
+  --color-primary-dark: #7c3aed;
+  --color-primary-light: #a78bfa;
+  --color-primary-50: #f5f3ff;
+  --color-primary-100: #ede9fe;
+  --color-primary-200: #ddd6fe;
+
+  /* ---- Neutral (토스풍) ---- */
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-bg-subtle: #f9fafb;
+  --color-text: #191f28;
+  --color-text-secondary: #4e5968;
+  --color-text-tertiary: #8b95a1;
+  --color-border: #e5e8eb;
+
+  /* ---- Status ---- */
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+
+  /* ---- Radius ---- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* ---- Shadow (부드럽게) ---- */
+  --shadow-sm: 0 1px 2px rgba(25, 31, 40, 0.06), 0 1px 3px rgba(139, 92, 246, 0.04);
+  --shadow-md: 0 4px 12px rgba(25, 31, 40, 0.08), 0 2px 6px rgba(139, 92, 246, 0.05);
+  --shadow-lg: 0 12px 32px rgba(25, 31, 40, 0.1), 0 4px 12px rgba(139, 92, 246, 0.07);
+
+  /* ---- Spacing ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* ---- Typography ---- */
+  --font-sans: 'Pretendard Variable', Pretendard, system-ui, -apple-system,
+    'Segoe UI', Roboto, sans-serif;
+
+  /* ---- Layout (desktop-first 기본값) ---- */
+  --container-max: 1200px;
+  --container-pad: var(--space-8);
+  --header-height: 72px;
+
+  /* ---- Transition ---- */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+}
+
+/* tablet: 화면이 작아질수록 패딩/헤더 축소 */
+@media (max-width: 1023px) {
+  :root {
+    --container-pad: var(--space-6);
+    --header-height: 64px;
+  }
+}
+
+/* mobile */
+@media (max-width: 767px) {
+  :root {
+    --container-pad: var(--space-4);
+  }
+}

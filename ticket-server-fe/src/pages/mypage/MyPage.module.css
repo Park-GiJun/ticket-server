@@ -1,0 +1,184 @@
+.page {
+  padding-block: var(--space-10) var(--space-12);
+}
+
+.header {
+  margin-bottom: var(--space-8);
+}
+
+.pageTitle {
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.pageSubtitle {
+  margin-top: var(--space-2);
+  font-size: 15px;
+  color: var(--color-text-secondary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+/* ---- profile ---- */
+.profileColumn {
+  position: sticky;
+  top: var(--space-6);
+}
+
+.profileCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.profileHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-100),
+    var(--color-primary-200)
+  );
+}
+
+.profileHeadText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.name {
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.email {
+  font-size: 14px;
+  color: var(--color-text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.infoList {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--color-border);
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.infoLabel {
+  font-size: 14px;
+  color: var(--color-text-tertiary);
+}
+
+.infoValue {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text);
+  text-align: right;
+}
+
+.logoutBtn {
+  margin-top: var(--space-1);
+}
+
+/* ---- history ---- */
+.historyCard {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.sectionTitle {
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+/* ---- tablet ---- */
+@media (max-width: 1023px) {
+  .page {
+    padding-block: var(--space-8) var(--space-10);
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+
+  .profileColumn {
+    position: static;
+    top: auto;
+  }
+
+  .pageTitle {
+    font-size: 24px;
+  }
+}
+
+/* ---- mobile ---- */
+@media (max-width: 767px) {
+  .page {
+    padding-block: var(--space-6) var(--space-8);
+  }
+
+  .header {
+    margin-bottom: var(--space-6);
+  }
+
+  .pageTitle {
+    font-size: 22px;
+  }
+
+  .pageSubtitle {
+    font-size: 14px;
+  }
+
+  .avatar {
+    width: 56px;
+    height: 56px;
+    font-size: 22px;
+  }
+
+  .name {
+    font-size: 18px;
+  }
+
+  .historyCard {
+    min-height: 240px;
+  }
+}

@@ -1,0 +1,419 @@
+.page {
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-12);
+}
+
+/* ------------------------------ breadcrumb ------------------------------ */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  font-size: 0.875rem;
+  color: var(--color-text-tertiary);
+}
+
+.breadcrumbLink {
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.breadcrumbLink:hover {
+  color: var(--color-primary-dark);
+}
+
+.breadcrumbSep {
+  color: var(--color-border);
+}
+
+.breadcrumbCurrent {
+  color: var(--color-text);
+  font-weight: 600;
+  max-width: 360px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* -------------------------------- layout -------------------------------- */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+  gap: var(--space-10);
+  align-items: start;
+}
+
+/* -------------------------------- poster -------------------------------- */
+.poster {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(
+    150deg,
+    var(--color-primary-light) 0%,
+    var(--color-primary) 55%,
+    var(--color-primary-dark) 100%
+  );
+  position: sticky;
+  top: var(--space-8);
+}
+
+.poster::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 72% 18%,
+    rgba(255, 255, 255, 0.3),
+    transparent 58%
+  );
+  pointer-events: none;
+}
+
+.posterCategory {
+  position: relative;
+  align-self: flex-start;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #fff;
+  padding: 4px var(--space-3);
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(4px);
+}
+
+.posterTitle {
+  position: relative;
+  font-size: 1.375rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: #fff;
+  text-shadow: 0 1px 8px rgba(25, 31, 40, 0.18);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.posterSkeleton {
+  aspect-ratio: 3 / 4;
+  width: 100%;
+}
+
+/* --------------------------------- info --------------------------------- */
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.infoSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+
+/* ------------------------------- schedule ------------------------------- */
+.schedule {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background-color: var(--color-bg-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.scheduleItem {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+}
+
+.scheduleLabel {
+  flex: 0 0 auto;
+  width: 72px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+}
+
+.scheduleValue {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+/* ------------------------------ section head ---------------------------- */
+.sectionHeading {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* ------------------------------ price card ------------------------------ */
+.priceCard {
+  overflow: hidden;
+}
+
+.priceHeader {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.priceList {
+  display: flex;
+  flex-direction: column;
+}
+
+.priceRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+}
+
+.priceRow:not(:last-child) {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.priceGrade {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.gradeBadge {
+  flex: 0 0 auto;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  background-color: var(--color-primary-50);
+  padding: 3px var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.sectionName {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.capacity {
+  font-size: 0.875rem;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+.price {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.priceSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.priceEmpty {
+  padding: var(--space-5);
+  font-size: 0.9375rem;
+  color: var(--color-text-tertiary);
+}
+
+/* ------------------------------- seat card ------------------------------ */
+.seatCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.seatHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.seatCount {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+}
+
+.seatCount strong {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.seatTotal {
+  color: var(--color-text-tertiary);
+}
+
+.gauge {
+  width: 100%;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary-50);
+  overflow: hidden;
+}
+
+.gaugeFill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    90deg,
+    var(--color-primary-light),
+    var(--color-primary)
+  );
+  transition: width var(--transition-base);
+}
+
+.gaugeFill[data-low='true'] {
+  background: linear-gradient(90deg, var(--color-warning), var(--color-danger));
+}
+
+.gaugeCaption {
+  font-size: 0.8125rem;
+  color: var(--color-text-tertiary);
+}
+
+/* ---------------------------------- cta --------------------------------- */
+.cta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.ctaReason {
+  font-size: 0.875rem;
+  color: var(--color-text-tertiary);
+  text-align: center;
+}
+
+.homeLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 var(--space-6);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.homeLink:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* ------------------------------- tablet --------------------------------- */
+@media (max-width: 1023px) {
+  .layout {
+    grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+    gap: var(--space-6);
+  }
+
+  .title {
+    font-size: 1.625rem;
+  }
+
+  .poster {
+    top: var(--space-6);
+  }
+}
+
+/* ------------------------------- mobile --------------------------------- */
+@media (max-width: 767px) {
+  .page {
+    padding-top: var(--space-5);
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .poster {
+    position: static;
+    aspect-ratio: 4 / 3;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .posterSkeleton {
+    aspect-ratio: 4 / 3;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .posterTitle {
+    font-size: 1.25rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .scheduleItem {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .scheduleLabel {
+    width: auto;
+  }
+
+  .priceRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: var(--space-1);
+  }
+
+  .capacity {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .price {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+
+  .breadcrumbCurrent {
+    max-width: 180px;
+  }
+}

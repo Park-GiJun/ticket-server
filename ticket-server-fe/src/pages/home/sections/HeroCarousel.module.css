@@ -1,0 +1,226 @@
+.hero {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--color-primary-50);
+  box-shadow: var(--shadow-md);
+}
+
+.track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide {
+  position: relative;
+  flex: 0 0 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.slide[data-variant='a'] {
+  background: linear-gradient(120deg, #7c3aed 0%, #8b5cf6 45%, #a78bfa 100%);
+}
+
+.slide[data-variant='b'] {
+  background: linear-gradient(120deg, #6d28d9 0%, #8b5cf6 55%, #c4b5fd 100%);
+}
+
+.slide[data-variant='c'] {
+  background: linear-gradient(120deg, #5b21b6 0%, #7c3aed 50%, #a78bfa 100%);
+}
+
+.slide::after {
+  content: '';
+  position: absolute;
+  right: -80px;
+  top: -80px;
+  width: 320px;
+  height: 320px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+}
+
+.slideInner {
+  position: relative;
+  z-index: 1;
+  padding: 0 var(--space-12);
+  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.badge {
+  align-self: flex-start;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(4px);
+}
+
+.title {
+  font-size: 38px;
+  line-height: 1.25;
+  font-weight: 800;
+  white-space: pre-line;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 17px;
+  font-weight: 500;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.cta {
+  margin-top: var(--space-3);
+  align-self: flex-start;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 12px 22px;
+  border-radius: var(--radius-full);
+  background: #ffffff;
+  color: var(--color-primary-dark);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.slide:hover .cta {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--color-text);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: background var(--transition-base), transform var(--transition-base);
+  z-index: 2;
+}
+
+.arrow:hover {
+  background: #ffffff;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.arrow:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.arrowPrev {
+  left: var(--space-5);
+}
+
+.arrowNext {
+  right: var(--space-5);
+}
+
+.dots {
+  position: absolute;
+  bottom: var(--space-5);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--space-2);
+  z-index: 2;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: width var(--transition-base), background var(--transition-base);
+}
+
+.dotActive {
+  width: 26px;
+  background: #ffffff;
+}
+
+@media (max-width: 1023px) {
+  .hero {
+    height: 300px;
+  }
+
+  .slideInner {
+    padding: 0 var(--space-8);
+  }
+
+  .title {
+    font-size: 30px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    height: 240px;
+    border-radius: var(--radius-lg);
+  }
+
+  .slideInner {
+    padding: 0 var(--space-5);
+    gap: var(--space-2);
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .cta {
+    margin-top: var(--space-2);
+    font-size: 13px;
+    padding: 10px 18px;
+  }
+
+  .arrow {
+    width: 38px;
+    height: 38px;
+    font-size: 20px;
+  }
+
+  .arrowPrev {
+    left: var(--space-2);
+  }
+
+  .arrowNext {
+    right: var(--space-2);
+  }
+}
