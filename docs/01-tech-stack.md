@@ -48,11 +48,17 @@
 | 문서화 | `springdoc-openapi-starter-webmvc-ui` |
 | 운영 | `spring-boot-starter-actuator` |
 | 직렬화 | `jackson-module-kotlin` (Jackson 3) |
-| 테스트 | `spring-boot-starter-test`, `spring-kafka-test`, `kotest`, `mockk`, `testcontainers` |
+| 테스트 | `spring-boot-starter-test`, `spring-boot-webmvc-test`, `spring-boot-resttestclient`, `spring-kafka-test`, `kotest`, `mockk`, `testcontainers` |
 
 > ℹ️ `spring-boot-docker-compose` 는 Version Catalog 에 정의돼 있으나 현재 어떤 모듈도
 > 의존하지 않는다(MSA 분리 후 `bootRun` 자동 컨테이너 기동을 사용하지 않음). 로컬 인프라는
 > `infra/compose.yaml` 로 **직접** 기동한다. → [10 문서](./10-configuration-and-run.md)
 > 보안/JPA 등은 모듈별로 필요한 것만 의존한다(예: `ticket-event-service` 는 security 미포함).
+
+> ⚠️ Spring Boot 4.0 은 테스트 슬라이스 지원을 **별도 아티팩트로 분리**했고 `spring-boot-starter-test`
+> 가 이들을 전이 포함하지 않는다. 패키지도 이동했다 — `@WebMvcTest`(`org.springframework.boot.webmvc.test.autoconfigure`,
+> `spring-boot-webmvc-test`), `TestRestTemplate`(`org.springframework.boot.resttestclient`,
+> `spring-boot-resttestclient`; `@SpringBootTest(RANDOM_PORT)` 에서 주입하려면 `@AutoConfigureTestRestTemplate`
+> 필요). 웹 슬라이스/HTTP e2e 테스트를 쓰는 모듈은 해당 아티팩트를 `testImplementation` 으로 명시 추가한다.
 
 > 의존성 구성은 사내 다른 프로젝트(`transfer-api`)의 백엔드 모듈 스택을 참고해 정렬했습니다.

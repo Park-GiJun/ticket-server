@@ -6,9 +6,12 @@
 > `/api/auth/**`·Swagger 외 경로는 유효한 JWT 를 요구한다. 조회 공개 전환이나 ADMIN 전용
 > 제한은 추후 `SecurityConfig`/메서드 보안으로 조정한다.
 
-컨트롤러(`TicketEventWebAdapter`)는 모든 응답을 `TicketEventResponse`(또는 이를 감싼
-`SectionCreationResponse`/`SeatCreationResponse`) 형태로 반환한다. 예매 진행 상태
-(`ticketEventStatus`)와 셋업 단계(`ticketCreationStatus`)는 별개의 필드다.
+컨트롤러는 세 개로 나뉜다 — 이벤트 쓰기/셋업/조회는 `TicketEventWebAdapter`, 구역 조회는
+`TicketEventSectionWebAdapter`, 좌석 조회는 `TicketEventSeatWebAdapter`. 이벤트 응답은
+`TicketEventResponse`(또는 이를 감싼 `SectionCreationResponse`/`SeatCreationResponse`),
+구역/좌석 조회 응답은 각각 `TicketEventSectionResponse`/`TicketEventSeatResponse`
+(좌석 잔여 현황은 `SeatAvailabilityResponse`) 형태다. 예매 진행 상태(`ticketEventStatus`)와
+셋업 단계(`ticketCreationStatus`)는 별개의 필드다.
 
 ## 엔드포인트 요약
 
@@ -24,8 +27,13 @@
 | POST | `/api/ticket-events/{id}/cancel` | 취소 | **Bearer** | 200 | [상태 전이](./status-transition.md) |
 | GET | `/api/ticket-events/{id}` | 단건 조회 | **Bearer** | 200 | [조회](./queries.md) |
 | GET | `/api/ticket-events?category=&status=` | 목록 조회(필터) | **Bearer** | 200 | [조회](./queries.md) |
+| GET | `/api/ticket-events/{eventId}/sections` | 구역 목록 조회 | **Bearer** | 200 | [조회](./queries.md) |
+| GET | `/api/ticket-events/{eventId}/sections/{sectionId}` | 구역 단건 조회(소속 검증) | **Bearer** | 200 | [조회](./queries.md) |
+| GET | `/api/ticket-events/{eventId}/seats` | 좌석 목록 조회 | **Bearer** | 200 | [조회](./queries.md) |
+| GET | `/api/ticket-events/{eventId}/seats/availability` | 좌석 잔여 현황(상태별 집계) | **Bearer** | 200 | [조회](./queries.md) |
+| GET | `/api/ticket-events/{eventId}/seats/{seatId}` | 좌석 단건 조회(소속 검증) | **Bearer** | 200 | [조회](./queries.md) |
 
-총 10개 엔드포인트. 에러 응답 포맷과 예외 매핑은 [에러 레퍼런스](./errors.md)를 참고한다.
+총 15개 엔드포인트. 에러 응답 포맷과 예외 매핑은 [에러 레퍼런스](./errors.md)를 참고한다.
 
 ## Enum 값
 

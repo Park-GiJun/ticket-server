@@ -10,7 +10,7 @@
 |------|------|
 | `command/TicketEventCommands.kt` | `CreateTicketEventCommand`, `UpdateTicketEventCommand`, `CreateSectionsCommand`(+`SectionSpec`), `CreateSeatsCommand` |
 | `query/TicketEventQueries.kt` | `SearchTicketEventsQuery` |
-| `result/TicketEventResults.kt` | `TicketEventResult`, `TicketEventSectionResult`, `SectionCreationResult`, `SeatCreationResult` |
+| `result/TicketEventResults.kt` | `TicketEventResult`, `TicketEventSectionResult`, `SectionCreationResult`, `SeatCreationResult`, `TicketEventSeatResult`, `SeatAvailabilityResult` |
 
 ## Command DTO
 
@@ -129,3 +129,27 @@
 |------|------|
 | `ticketEvent` | `TicketEventResult` |
 | `createdSeatCount` | `Int` |
+
+### `TicketEventSeatResult`
+
+좌석 1건 조회 결과. `from(model)` 팩토리(`id` 비-null 강제).
+
+| 필드 | 타입 |
+|------|------|
+| `id` | `Long` |
+| `sectionId` | `Long` |
+| `ticketEventId` | `Long` |
+| `rowLabel` | `String` |
+| `seatNumber` | `Int` |
+| `status` | `SeatStatus` |
+
+### `SeatAvailabilityResult`
+
+이벤트의 좌석 잔여 현황. `from(ticketEventId, counts)` 팩토리가 누락 상태를 0 으로 채우고 합계/잔여석을 도출한다.
+
+| 필드 | 타입 | 비고 |
+|------|------|------|
+| `ticketEventId` | `Long` | |
+| `counts` | `Map<SeatStatus, Long>` | 4개 상태를 항상 포함(누락분 0) |
+| `total` | `Long` | 상태별 좌석 수의 합 |
+| `available` | `Long` | `AVAILABLE` 좌석 수 |

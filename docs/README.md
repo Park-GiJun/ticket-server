@@ -99,6 +99,8 @@ docs/{domain}/
 - 티켓 이벤트(공연/경기) CRUD·예매 상태전이(오픈/마감/취소)·조회 REST API (`/api/ticket-events`)
 - 티켓 이벤트 셋업 워크플로우: 구역(Section) 생성 → 좌석(Seat) 자동 생성 → 완료 (4단계 생성 단계 추적)
 - 좌석 상태 모델(AVAILABLE/HELD/SOLD/BLOCKED) 및 매진 판정·잔여석 집계용 영속성 쿼리
+- 구역/좌석 조회 API (목록·단건·좌석 잔여 현황), 단건 조회 시 이벤트 소속 검증(404)
+- 티켓 이벤트 조회 레이어 테스트(Kotest + MockK): 단위(핸들러/DTO)·웹 슬라이스(`@WebMvcTest`)·e2e(`@SpringBootTest`, H2)
 
 ## 🗺️ 앞으로 (예정)
 
@@ -107,4 +109,4 @@ docs/{domain}/
 - 권한 기반 인가(티켓 이벤트 생성/수정은 ADMIN 전용 등)
 - Refresh Token, 로그아웃(토큰 블랙리스트)
 - 권한 기반 인가(ADMIN 전용 API)
-- Flyway 마이그레이션 전환, 테스트 코드(Kotest + Testcontainers)
+- Flyway 마이그레이션 전환, 테스트 커버리지 확대(Testcontainers 기반 PostgreSQL e2e, user-service 테스트)

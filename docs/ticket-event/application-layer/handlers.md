@@ -57,3 +57,27 @@
 | `search` | `search(category, status)` 결과를 `TicketEventResult` 로 매핑 |
 
 - **의존 포트**: `TicketEventPersistencePort`.
+
+## `TicketEventSectionQueryHandler` (query, `readOnly`)
+
+`GetSectionUseCase` · `ListSectionsByEventUseCase` 구현.
+
+| 구현 유스케이스 | 동작 |
+|-----------------|------|
+| `getById` | `findById` → `takeIf { it.ticketEventId == ticketEventId }` (소속 불일치/없음이면 `SectionNotFound`) → `TicketEventSectionResult.from` |
+| `listByEvent` | `findByTicketEventId` 결과를 `TicketEventSectionResult` 로 매핑 |
+
+- **의존 포트**: `TicketEventSectionPersistencePort`.
+
+## `TicketEventSeatQueryHandler` (query, `readOnly`)
+
+`GetSeatUseCase` · `ListSeatsByEventUseCase` · `GetSeatAvailabilityUseCase` 구현.
+
+| 구현 유스케이스 | 동작 |
+|-----------------|------|
+| `getById` | `findById` → `takeIf { it.ticketEventId == ticketEventId }` (소속 불일치/없음이면 `SeatNotFound`) → `TicketEventSeatResult.from` |
+| `listByEvent` | `findByTicketEventId` 결과를 `TicketEventSeatResult` 로 매핑 |
+| `getAvailability` | `countByTicketEventIdGroupedByStatus` → `SeatAvailabilityResult.from`(누락 상태 0 채움·합계/잔여석 도출) |
+
+- **의존 포트**: `TicketEventSeatPersistencePort`.
+- 단건 조회의 소속 검증은 좌석/구역 모델이 비정규화한 `ticketEventId` 로 추가 조회 없이 수행한다.

@@ -41,7 +41,7 @@ interface CreateSectionsUseCase { fun createSections(command: CreateSectionsComm
 interface CreateSeatsUseCase { fun createSeats(command: CreateSeatsCommand): SeatCreationResult }
 ```
 
-## 조회 — `port/in/query/TicketEventQueryUseCases.kt`
+## 이벤트 조회 — `port/in/query/TicketEventQueryUseCases.kt`
 
 구현체는 [`TicketEventQueryHandler`](./handlers.md).
 
@@ -49,6 +49,30 @@ interface CreateSeatsUseCase { fun createSeats(command: CreateSeatsCommand): Sea
 interface GetTicketEventUseCase { fun getById(id: Long): TicketEventResult }
 interface SearchTicketEventsUseCase { fun search(query: SearchTicketEventsQuery): List<TicketEventResult> }
 ```
+
+## 구역 조회 — `port/in/query/TicketEventSectionQueryUseCases.kt`
+
+구현체는 [`TicketEventSectionQueryHandler`](./handlers.md).
+
+```kotlin
+interface GetSectionUseCase { fun getById(ticketEventId: Long, id: Long): TicketEventSectionResult }
+interface ListSectionsByEventUseCase { fun listByEvent(ticketEventId: Long): List<TicketEventSectionResult> }
+```
+
+- `getById` 는 `ticketEventId` 를 함께 받아 **소속 검증**한다. 구역이 그 이벤트 소속이 아니면 없음(`SectionNotFound`)으로 취급.
+
+## 좌석 조회 — `port/in/query/TicketEventSeatQueryUseCases.kt`
+
+구현체는 [`TicketEventSeatQueryHandler`](./handlers.md).
+
+```kotlin
+interface GetSeatUseCase { fun getById(ticketEventId: Long, id: Long): TicketEventSeatResult }
+interface ListSeatsByEventUseCase { fun listByEvent(ticketEventId: Long): List<TicketEventSeatResult> }
+interface GetSeatAvailabilityUseCase { fun getAvailability(ticketEventId: Long): SeatAvailabilityResult }
+```
+
+- `getById` 는 구역과 마찬가지로 `ticketEventId` 소속 검증을 포함한다(불일치 시 `SeatNotFound`).
+- `getAvailability` 는 상태별 좌석 수 집계를 합계/잔여석과 함께 반환한다([dto.md](./dto.md)의 `SeatAvailabilityResult`).
 
 ## 셋업(생성) 워크플로우와 유스케이스 매핑
 

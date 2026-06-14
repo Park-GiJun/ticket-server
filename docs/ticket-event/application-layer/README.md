@@ -28,12 +28,12 @@ dto/
 port/
   in/
     command/ TicketEventCommandUseCases.kt · TicketEventSectionCommandUseCases.kt · TicketEventSeatCommandUseCases.kt
-    query/   TicketEventQueryUseCases.kt
+    query/   TicketEventQueryUseCases.kt · TicketEventSectionQueryUseCases.kt · TicketEventSeatQueryUseCases.kt
   out/
     persistence/ TicketEventPersistencePort.kt · TicketEventSectionPersistencePort.kt · TicketEventSeatPersistencePort.kt
 handler/
   command/   TicketEventCommandHandler.kt · TicketEventSectionCommandHandler.kt · TicketEventSeatCommandHandler.kt
-  query/     TicketEventQueryHandler.kt
+  query/     TicketEventQueryHandler.kt · TicketEventSectionQueryHandler.kt · TicketEventSeatQueryHandler.kt
 ```
 
 ## 세부 문서

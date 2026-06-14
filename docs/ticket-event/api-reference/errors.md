@@ -49,8 +49,8 @@ Bean Validation(`@Valid`) 실패 시 `CommonExceptionHandler` 가 `fieldErrors` 
 | 예외 | HTTP | 비고 |
 |------|------|------|
 | `TicketEventNotFound` | **404** Not Found | 대상 티켓 이벤트 없음 |
-| `SectionNotFound` | **404** Not Found | 좌석 구역 없음 |
-| `SeatNotFound` | **404** Not Found | 좌석 없음 |
+| `SectionNotFound` | **404** Not Found | 좌석 구역 없음(단건 조회 시 경로 `eventId` 소속 불일치 포함) |
+| `SeatNotFound` | **404** Not Found | 좌석 없음(단건 조회 시 경로 `eventId` 소속 불일치 포함) |
 | `InvalidStatusTransition` | **409** Conflict | 허용되지 않는 예매/셋업 단계 전이 |
 | `InvalidSeatStatusTransition` | **409** Conflict | 허용되지 않는 좌석 상태 전이 |
 
