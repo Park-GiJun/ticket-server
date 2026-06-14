@@ -5,11 +5,12 @@ spring:
   application:
     name: ticket-event-service
 
-  # === Datasource (dev: H2, PostgreSQL 호환 모드) ===
+  # === Datasource (Docker PostgreSQL: infra/compose.yaml) ===
   datasource:
-    url: jdbc:h2:mem:ticketevent;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password: ""
+    url: jdbc:postgresql://localhost:5432/ticket
+    username: ticket
+    password: secret
+    driver-class-name: org.postgresql.Driver
 
   # === JPA / Hibernate ===
   jpa:
