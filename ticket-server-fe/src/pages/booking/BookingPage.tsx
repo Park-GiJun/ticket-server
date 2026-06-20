@@ -12,9 +12,9 @@ import {
   Button,
   Card,
   EmptyState,
-  Modal,
   Skeleton,
 } from '../../components/ui';
+import { toast } from '../../store/toastStore';
 import { formatPrice } from '../../lib/format';
 import SeatMap from './SeatMap';
 import styles from './BookingPage.module.css';
@@ -33,7 +33,6 @@ export default function BookingPage() {
   const [selectedSeatIds, setSelectedSeatIds] = useState<ReadonlySet<number>>(
     () => new Set()
   );
-  const [payModalOpen, setPayModalOpen] = useState(false);
 
   const sectionsQuery = useQuery({
     queryKey: ['sections', eventId],
@@ -359,7 +358,7 @@ export default function BookingPage() {
                 fullWidth
                 size="lg"
                 disabled={sortedSelectedSeats.length === 0}
-                onClick={() => setPayModalOpen(true)}
+                onClick={() => toast.error('예매·결제 기능은 개발 예정입니다.')}
               >
                 결제하기
               </Button>
@@ -382,41 +381,13 @@ export default function BookingPage() {
           <Button
             size="lg"
             disabled={selectedSeats.length === 0}
-            onClick={() => setPayModalOpen(true)}
+            onClick={() => toast.error('예매·결제 기능은 개발 예정입니다.')}
           >
             결제하기
           </Button>
         </div>
       )}
 
-      <Modal
-        open={payModalOpen}
-        onClose={() => setPayModalOpen(false)}
-        title="예매 기능 준비 중"
-      >
-        <div className={styles.modalBody}>
-          <div className={styles.modalIcon} aria-hidden="true">
-            🛠️
-          </div>
-          <p className={styles.modalText}>
-            예매 기능은 현재 준비 중입니다.
-            <br />
-            (reservation 도메인 추가 예정)
-          </p>
-          {sortedSelectedSeats.length > 0 && selectedSection && (
-            <div className={styles.modalSummary}>
-              <span>
-                {selectedSection.sectionName} ·{' '}
-                {sortedSelectedSeats.length}매
-              </span>
-              <strong>{formatPrice(totalPrice)}</strong>
-            </div>
-          )}
-          <Button fullWidth onClick={() => setPayModalOpen(false)}>
-            확인
-          </Button>
-        </div>
-      </Modal>
     </div>
   );
 }

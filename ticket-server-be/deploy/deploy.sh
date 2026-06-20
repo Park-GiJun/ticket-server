@@ -29,6 +29,9 @@ for pair in $MODULES; do
   rm -f "$DEPLOY/app.jar"
 done
 
+echo "== 2.5) FE 이미지 빌드 =="
+docker build -t "ticketserver-fe:${TAG:-latest}" "$ROOT/../ticket-server-fe"
+
 echo "== 3) 배포(compose up) =="
 docker compose -f "$DEPLOY/docker-compose.yml" up -d --remove-orphans
 

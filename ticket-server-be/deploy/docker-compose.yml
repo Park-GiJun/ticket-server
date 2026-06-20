@@ -54,3 +54,13 @@ services:
       EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
       MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,prometheus"
     networks: [ticketserver-net]
+
+  # 프론트엔드(nginx: 정적 + /api 게이트웨이 프록시)
+  fe:
+    image: ticketserver-fe:${TAG:-latest}
+    container_name: ticket-fe
+    restart: unless-stopped
+    depends_on: [gateway]
+    ports:
+      - "${FE_PORT:-13000}:80"
+    networks: [ticketserver-net]
