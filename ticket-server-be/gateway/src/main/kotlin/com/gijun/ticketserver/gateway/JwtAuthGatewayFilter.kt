@@ -54,8 +54,12 @@ class JwtAuthGatewayFilter(
         return if (header.startsWith(BEARER_PREFIX)) header.substring(BEARER_PREFIX.length) else null
     }
 
-    private fun isPublic(request: HttpServletRequest): Boolean =
-        PUBLIC_PATHS.any { pathMatcher.match(it, request.requestURI) }
+    private fun isPublic(request: HttpServletRequest): Boolean {
+        if (PUBLIC_PATHS.any { pathMatcher.match(it, request.requestURI) }) return true
+        // 공연 조회(GET)는 비로그인도 허용한다(생성/수정은 인증 필요).
+        return request.method.equals("GET", ignoreCase = true) &&
+            PUBLIC_GET_PATHS.any { pathMatcher.match(it, request.requestURI) }
+    }
 
     private fun writeUnauthorized(response: HttpServletResponse) {
         response.status = HttpServletResponse.SC_UNAUTHORIZED
@@ -70,6 +74,9 @@ class JwtAuthGatewayFilter(
         const val HEADER_USER_EMAIL = "X-User-Email"
         const val HEADER_USER_ROLE = "X-User-Role"
         private val PUBLIC_PATHS = listOf("/api/auth/**", "/actuator/**")
+
+        // 비로그인도 허용하는 GET 전용 경로(공연 목록·상세·구역·좌석 조회).
+        private val PUBLIC_GET_PATHS = listOf("/api/ticket-events/**")
     }
 }
 
