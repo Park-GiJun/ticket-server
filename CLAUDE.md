@@ -11,8 +11,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 영속성: JPA(Hibernate) + PostgreSQL (로컬 dev 는 H2 PostgreSQL 호환 모드)
 - 부가 인프라: Redis(토큰 저장), Kafka(이벤트 발행)
 
-> `docs/`(저장소 루트)에 단계별 설계·구현 문서가 있다. **단, 일부 문서(특히 `03`, `10`)는
-> MSA 전환 이전의 단일 모듈 기준으로 작성되어 현재 구조와 어긋난 부분이 있다.** 코드가 정답이다.
+> `docs/`(저장소 루트)에 **서비스(도메인)별 설계·구현 문서**가 있다(`docs/user/`·`docs/ticket-event/`·
+> `docs/reservation/`, 인덱스는 `docs/README.md`). 작업 기록이라 코드와 어긋날 수 있다 — **코드가 정답이다.**
 
 ## 모듈 구조
 
@@ -20,10 +20,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | 모듈 | 포트 | 역할 |
 |------|------|------|
-| `discovery-server` | 8761 | Eureka 서버(단일 노드, 자기 등록 안 함) |
-| `gateway` | 8080 | Spring Cloud Gateway. **유일한 외부 진입점 + 단일 인증 지점** |
-| `user-service` | 8081 | 사용자/인증 도메인 (회원가입·로그인·비밀번호 재설정·내 정보) |
-| `ticket-event-service` | 8082 | 티켓 이벤트(공연/경기) CRUD·상태전이·조회 |
+| `discovery-server` | 18761 | Eureka 서버(단일 노드, 자기 등록 안 함) |
+| `gateway` | 18080 | Spring Cloud Gateway. **유일한 외부 진입점 + 단일 인증 지점** |
+| `user-service` | 18081 | 사용자/인증 도메인 (회원가입·로그인·비밀번호 재설정·내 정보) |
+| `ticket-event-service` | 18082 | 티켓 이벤트(공연/경기) CRUD·상태전이·조회 |
+| `reservation-service` | 18083 | 예매 도메인 (진행 중) |
+| `payment-service` | 18084 | 결제 도메인 (진행 중) |
 | `common` | — | 실행 불가 `java-library`. JWT 검증기·공통 예외 핸들러·OpenApi 설정 공유 |
 
 모든 모듈은 패키지 루트 `com.gijun.ticketserver` 를 공유한다(모듈이 달라도 같은 베이스 패키지).
@@ -66,6 +68,20 @@ infrastructure/
   명령/조회 인터페이스는 각각 `<도메인>CommandUseCases.kt` / `<도메인>QueryUseCases.kt` 에 모은다.
 - 아웃바운드 포트 구현체는 **모두** `infrastructure/adapter/out/<도메인>/<관심사>/` 아래 둔다.
 
+## 일정관리 파이프라인 (Jira · Notion · Slack · GitHub)
+
+커밋/푸시는 **네 서비스를 한 번에 동기화**한다. 진입점은 Claude Code 스킬 **`/ship`**
+(`.claude/commands/ship.md`). 직접 커밋만 할 때도 아래 규칙을 따른다.
+
+- **Jira `KAN`("내 칸반 스페이스", gijun.atlassian.net) 이 일정의 정본.** 에픽=도메인 마일스톤
+  (인프라=`KAN-1`, 인증=`KAN-2`, 티켓이벤트=`KAN-3`, 예매=`KAN-4`, 결제=`KAN-5`), 작업=커밋 단위 이슈, 라벨=`<모듈>`+`<커밋타입>`.
+- **커밋 메시지 본문에 `Refs: KAN-xx`** 를 넣어 GitHub↔Jira 를 연결한다.
+- **Notion** `커밋 로그` DB(허브: ticket-server 일정관리 허브)에 커밋당 1행 기록.
+- **Slack `새-채널`** 로 변경 알림 전송(봇 미초대 시 `not_in_channel` → 초대 필요).
+- 흐름: **Jira 이슈 확보 → 커밋(Refs 포함) → GitHub 푸시 → Notion 기록 → Jira 전이 + Slack 알림.**
+  커밋/푸시 후의 동기화는 실패해도 롤백하지 않고 부분 성공으로 처리한다.
+- 리소스 ID(cloudId·data_source_id·channel_id·에픽 키)는 모두 `ship.md` 상단 표에 고정돼 있다.
+
 ## 빌드 & 실행 명령
 
 **반드시 빌드 루트 `ticket-server-be/` 에서 실행**(또는 `-p ticket-server-be`).
@@ -96,14 +112,17 @@ $env:JAVA_HOME = 'C:\Users\<user>\.jdks\temurin-25.0.2'
 ### 로컬 인프라 (Redis / Kafka / PostgreSQL)
 
 `infra/compose.yaml`(저장소 루트의 `infra/`)에 PostgreSQL/Redis/Elasticsearch/Kafka 가 정의돼 있다.
-현재 빌드에는 `spring-boot-docker-compose` 자동 기동 의존성이 **없으므로**(`docs/10` 의 자동 기동
-설명은 옛 단일 모듈 기준) Redis/Kafka 가 필요한 기능(비밀번호 재설정)을 쓰려면 컨테이너를 직접 띄운다:
+현재 빌드에는 `spring-boot-docker-compose` 자동 기동 의존성이 **없으므로** Redis/Kafka 가 필요한
+기능(비밀번호 재설정)을 쓰려면 컨테이너를 직접 띄운다:
 
 ```powershell
 docker compose -f ..\infra\compose.yaml up -d   # ticket-server-be 기준 상위의 infra/
 ```
 
-기본 dev 설정은 H2 인메모리라 회원가입/로그인/티켓이벤트 CRUD 는 인프라 없이 동작한다.
+**개발도 별도 dev 인프라 없이 공용 홈서버 인프라를 직접 쓴다**(개인 프로젝트 정책): 각 서비스
+`application.yml` 의 datasource/redis/kafka 가 `210.121.177.150` 의 `infra-postgres`(DB `ticketserver`)/
+`infra-redis`(6380)/`infra-kafka`(9094) 를 가리킨다. 따라서 로컬에서 인프라 컨테이너를 띄울 필요가 없다
+(Eureka 만 로컬 `discovery-server` 18761 로 구동). 배포·서버 토폴로지는 `ticket-server-be/deploy/README.md` 참고.
 
 ## 기술 스택 세부
 

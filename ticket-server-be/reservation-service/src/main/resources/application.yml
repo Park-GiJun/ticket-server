@@ -1,15 +1,15 @@
 server:
-  port: 8083
+  port: 18083
 
 spring:
   application:
     name: reservation-service
 
-  # === Datasource (Docker PostgreSQL: infra/compose.yaml) ===
+  # === Datasource (공용 서버 인프라: infra-postgres 의 ticketserver DB) ===
   datasource:
-    url: jdbc:postgresql://localhost:5432/ticket
-    username: ticket
-    password: secret
+    url: jdbc:postgresql://210.121.177.150:5432/ticketserver
+    username: ticketserver
+    password: ts_8dd5abacbee74fd0a6c4a5f57a3bd691
     driver-class-name: org.postgresql.Driver
 
   # === JPA / Hibernate ===
@@ -25,4 +25,4 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:18761/eureka/

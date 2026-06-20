@@ -1,15 +1,16 @@
 server:
-  port: 8081
+  port: 18081
 
 spring:
   application:
     name: user-service
 
-  # === Datasource (dev: H2, PostgreSQL 호환 모드) ===
+  # === Datasource (공용 서버 인프라: infra-postgres 의 ticketserver DB) ===
   datasource:
-    url: jdbc:h2:mem:user;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password: ""
+    url: jdbc:postgresql://210.121.177.150:5432/ticketserver
+    username: ticketserver
+    password: ts_8dd5abacbee74fd0a6c4a5f57a3bd691
+    driver-class-name: org.postgresql.Driver
 
   # === JPA / Hibernate ===
   jpa:
@@ -20,15 +21,16 @@ spring:
       hibernate:
         format_sql: true
 
-  # === Redis (비밀번호 재설정 토큰 저장) ===
+  # === Redis (공용 infra-redis, 비밀번호 재설정 토큰 저장) ===
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: 210.121.177.150
+      port: 6380
+      password: stocksim123
 
-  # === Kafka (사용자 이벤트 발행) ===
+  # === Kafka (공용 infra-kafka, 사용자 이벤트 발행) ===
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: 210.121.177.150:9094
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -39,7 +41,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:18761/eureka/
 
 # === JWT ===
 jwt:
