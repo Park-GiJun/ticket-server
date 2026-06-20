@@ -16,7 +16,18 @@ allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git c
 | Jira 전이 ID | 해야 할 일=`11` · 진행 중=`21` · 완료=`31` (모든 이슈 공통) |
 | Notion data_source_id | `e4bd1bad-07ad-4084-8eae-34fd9071d20f` (커밋 로그 DB) |
 | Notion 허브 page_id | `38581e31-b648-81d0-b791-f0c4d9fabfd2` |
-| Slack channel_id | `C0BBG7271AT` (`새-채널`) |
+| Slack channel_id | `C0BBY1G754J` (`schedule-history` = 일정 히스토리) — /ship 동기화 알림 전용 |
+
+## Slack 채널 맵 (용도별 분리 — 봇 참여 확인됨 2026-06-20)
+
+| 채널 | channel_id | 용도 |
+|------|-----------|------|
+| `schedule-history` | `C0BBY1G754J` | **/ship 커밋·배포 동기화 알림** (이 스킬이 쓰는 채널) |
+| `issue-report` | `C0BC1KUJVNG` | AI 테스트 실행 후 발견 이슈 자동 업로드 |
+| `application-error-be` | `C0BBVUFGRGE` | 백엔드 런타임 오류 모니터링 (추후) |
+| `application-error-fe` | `C0BBRL7T9FD` | 프론트엔드 오류 모니터링 (추후) |
+
+> 구 `새-채널`(`C0BBG7271AT`)은 더 이상 쓰지 않는다.
 
 ## 도메인 에픽 맵 (정본 — 작업 이슈는 변경된 모듈에 맞는 에픽 하위로 묶는다)
 
@@ -27,6 +38,10 @@ allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git c
 | `KAN-3` | 티켓 이벤트 | ticket-event |
 | `KAN-4` | 예매 (진행 중) | reservation |
 | `KAN-5` | 결제 (신규) | payment |
+| `KAN-29` | 프론트엔드 | frontend (ticket-server-fe) |
+| `KAN-30` | 배포·CI/CD | infra · build · config (Docker/TeamCity/배포) |
+| `KAN-31` | 오류 모니터링·관측성 | observability (BE/FE 오류·로그·메트릭·추적) |
+| `KAN-32` | AI 테스트·QA | qa · test (AI 러너·issue-report·E2E·부하) |
 
 > KAN-27/KAN-28 은 중복이라 폐기(완료)했다. 절대 쓰지 말 것.
 
@@ -89,7 +104,7 @@ allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git c
 ### 5. Jira 상태 전이 + Slack 알림
 - `transitionJiraIssue` 로 이슈를 **완료(`31`)** 로 옮긴다(작업이 미완이면 진행 중 `21`). 전이 ID는 상단 표 참고.
   필요하면 `addCommentToJiraIssue` 로 커밋 해시를 코멘트로 남긴다.
-- `slack_post_message`(`channel_id=C0BBG7271AT`)로 알림 전송:
+- `slack_post_message`(`channel_id=C0BBY1G754J`, `schedule-history`)로 알림 전송:
   ```
   :rocket: <type>(<scope>): <제목>
   • Jira: <KAN-xx webUrl>
@@ -104,4 +119,4 @@ allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git c
 ## 실패 처리 (부분 성공 허용)
 - 4단계 이후 어느 서비스가 실패해도 **커밋/푸시는 이미 끝났으므로 롤백하지 않는다.** 실패한 서비스만 표시하고,
   사용자가 재시도할 수 있도록 필요한 ID(KAN 키·해시)를 출력에 남긴다.
-- Slack 전송이 `not_in_channel` 로 실패하면 "`새-채널`에 봇 초대 필요"를 안내한다.
+- Slack 전송이 `not_in_channel` 로 실패하면 "`schedule-history` 에 봇 초대 필요"를 안내한다.

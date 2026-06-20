@@ -77,7 +77,8 @@ infrastructure/
   (인프라=`KAN-1`, 인증=`KAN-2`, 티켓이벤트=`KAN-3`, 예매=`KAN-4`, 결제=`KAN-5`), 작업=커밋 단위 이슈, 라벨=`<모듈>`+`<커밋타입>`.
 - **커밋 메시지 본문에 `Refs: KAN-xx`** 를 넣어 GitHub↔Jira 를 연결한다.
 - **Notion** `커밋 로그` DB(허브: ticket-server 일정관리 허브)에 커밋당 1행 기록.
-- **Slack `새-채널`** 로 변경 알림 전송(봇 미초대 시 `not_in_channel` → 초대 필요).
+- **Slack `schedule-history`** 로 변경 알림 전송(봇 미초대 시 `not_in_channel` → 초대 필요).
+  용도별 채널 분리: `schedule-history`(일정·배포), `issue-report`(AI 테스트 이슈), `application-error-be`/`-fe`(오류 모니터링). ID 는 `ship.md` 의 Slack 채널 맵 참고.
 - 흐름: **Jira 이슈 확보 → 커밋(Refs 포함) → GitHub 푸시 → Notion 기록 → Jira 전이 + Slack 알림.**
   커밋/푸시 후의 동기화는 실패해도 롤백하지 않고 부분 성공으로 처리한다.
 - 리소스 ID(cloudId·data_source_id·channel_id·에픽 키)는 모두 `ship.md` 상단 표에 고정돼 있다.
