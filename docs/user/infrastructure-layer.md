@@ -30,7 +30,7 @@ class UserEntity(
 - enum 은 `EnumType.STRING` 으로 저장(순서 변경에 안전).
 - 생성/수정 시각은 Hibernate `@CreationTimestamp`/`@UpdateTimestamp` 로 자동 관리.
 - `kotlin("plugin.jpa")` + `allOpen`(Entity/MappedSuperclass/Embeddable) 설정으로
-  JPA 프록시/no-arg 생성자 요건 충족 → [02 문서](./02-build-and-gradle.md).
+  JPA 프록시/no-arg 생성자 요건 충족 → 빌드 설정은 저장소 루트 [CLAUDE.md](../../CLAUDE.md) 참고.
 
 ### UserPersistenceRepository (`repository/`)
 
@@ -102,4 +102,4 @@ private fun send(topic: String, key: String, payload: String) {
 ## JWT (Token)
 
 `infrastructure/adapter/out/user/token/JwtTokenProvider.kt` — `UserTokenPort` 구현.
-상세는 [07. 보안 & JWT](./07-security-and-jwt.md) 참고.
+상세는 [보안 & JWT](./security-and-jwt.md) 참고.

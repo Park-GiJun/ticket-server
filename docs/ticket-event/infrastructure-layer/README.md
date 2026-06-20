@@ -3,7 +3,7 @@
 > 상위: [티켓 이벤트 도메인 인덱스](../README.md)
 
 애플리케이션 레이어 아웃바운드 포트([`../application-layer/ports.md`](../application-layer/ports.md))들의 JPA 구현.
-User 영속성 어댑터([06](../../06-infrastructure-layer.md))와 동일한 구조를 따른다.
+User 영속성 어댑터([user/infrastructure-layer](../../user/infrastructure-layer.md))와 동일한 구조를 따른다.
 
 ## 영속성 어댑터 개요
 

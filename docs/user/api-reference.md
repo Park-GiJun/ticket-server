@@ -14,7 +14,7 @@ springdoc-openapi 로 자동 생성된다.
 - `infrastructure/config/OpenApiConfig.kt` 에서 **JWT Bearer 보안 스킴**(`bearerAuth`)을 등록한다.
 - Swagger UI 의 **Authorize** 버튼에 로그인으로 받은 토큰을 넣으면 보호된 API(`/users/me`)를 테스트할 수 있다.
 - 컨트롤러(`UserWebAdapter`)에 `@Tag`/`@Operation`/`@ApiResponses` 로 설명이 부여돼 있다.
-- 공개 경로라 인증 없이 접근 가능하도록 `/swagger-ui/**`, `/v3/api-docs/**` 를 `permitAll` 처리 → [07](./07-security-and-jwt.md).
+- 공개 경로라 인증 없이 접근 가능하도록 `/swagger-ui/**`, `/v3/api-docs/**` 를 `permitAll` 처리 → [보안 & JWT](./security-and-jwt.md).
 
 ## 엔드포인트 요약
 

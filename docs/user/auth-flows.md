@@ -39,7 +39,7 @@ Client ──GET /api/users/me  (Authorization: Bearer <token>)
 ```
 
 > 게이트웨이와 user-service 가 **이중으로** 검증한다(게이트웨이 우회 직접 호출 방어).
-> `/api/auth/**` 발급 계열은 게이트웨이·user-service 양쪽에서 공개 경로다. → [07](./07-security-and-jwt.md)
+> `/api/auth/**` 발급 계열은 게이트웨이·user-service 양쪽에서 공개 경로다. → [보안 & JWT](./security-and-jwt.md)
 
 ## 3. 비밀번호 재설정 (Reset Password)
 

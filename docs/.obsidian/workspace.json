@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "03-architecture.md",
-                "mode": "source",
-                "source": false
+                "file": "ticket-event/domain-layer/enums.md",
+                "mode": "preview",
+                "source": true
               },
               "icon": "lucide-file",
-              "title": "03-architecture"
+              "title": "enums"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "03-architecture.md",
+                "file": "reservation/domain-layer/reservation-model.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "03-architecture 의 백링크"
+              "title": "reservation-model 의 백링크"
             }
           },
           {
@@ -185,6 +185,17 @@
   },
   "active": "b163488a01c44e3d",
   "lastOpenFiles": [
+    "reservation/domain-layer/enums.md",
+    "reservation/domain-layer/reservation-model.md",
+    "ticket-event/domain-layer/seat-model.md",
+    "ticket-event/domain-layer/ticket-reservation-model.md",
+    "ticket-event/domain-layer/ticket-event-model.md",
+    "04-domain-layer.md",
+    "ticket-event/domain-layer/README.md",
+    "ticket-event/domain-layer/section-model.md",
+    "ticket-event/domain-layer/enums.md",
+    "ticket-event/domain-layer/exceptions.md",
+    "03-architecture.md",
     "README.md.tmp.20492.c6b6b8a3ab73",
     "10-configuration-and-run.md.tmp.20492.0c51828bfafe",
     "07-security-and-jwt.md.tmp.20492.26ef38602a68",

@@ -67,7 +67,7 @@ fun validatePasswordPolicy(rawPassword: String) {
 
 `sealed class` 로 정의해 예외 처리기에서 `when` 으로 **누락 없이** 매핑한다.
 
-| 예외 | 의미 | HTTP (→ [09](./09-api-reference.md)) |
+| 예외 | 의미 | HTTP (→ [API 레퍼런스](./api-reference.md)) |
 |------|------|------|
 | `EmailAlreadyExists` | 이메일 중복 | 409 |
 | `UserNotFound` | 사용자 없음 | 404 |
