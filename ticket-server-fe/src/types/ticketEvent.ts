@@ -43,6 +43,8 @@ export interface Section {
   grade: string;
   price: number;
   capacity: number;
+  /** 좌석 배치도 행당 좌석 수(레이아웃) */
+  seatsPerRow: number;
 }
 
 export interface Seat {

@@ -77,6 +77,7 @@ export interface CreateSectionBody {
   grade: string;
   price: number;
   capacity: number;
+  seatsPerRow: number;
 }
 
 export interface CreateSeatBody {

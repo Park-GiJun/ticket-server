@@ -21,6 +21,7 @@ interface SectionRow {
   grade: string;
   price: string;
   capacity: string;
+  seatsPerRow: string;
 }
 
 const emptyRow = (): SectionRow => ({
@@ -28,6 +29,7 @@ const emptyRow = (): SectionRow => ({
   grade: 'R',
   price: '',
   capacity: '',
+  seatsPerRow: '20',
 });
 
 const inputStyle: CSSProperties = {
@@ -81,6 +83,7 @@ export default function AdminEventManagePage() {
           grade: r.grade.trim() || 'R',
           price: Number(r.price) || 0,
           capacity: Number(r.capacity) || 0,
+          seatsPerRow: Number(r.seatsPerRow) || 20,
         }));
       return createSections(eventId, body);
     },
@@ -163,7 +166,7 @@ export default function AdminEventManagePage() {
               key={i}
               style={{
                 display: 'grid',
-                gridTemplateColumns: '2fr 1fr 1.4fr 1fr auto',
+                gridTemplateColumns: '2fr 0.8fr 1.1fr 1fr 1fr auto',
                 gap: 8,
                 alignItems: 'center',
               }}
@@ -196,10 +199,19 @@ export default function AdminEventManagePage() {
               <input
                 style={inputStyle}
                 type="number"
-                placeholder="좌석수"
+                placeholder="총 좌석수"
                 value={r.capacity}
                 onChange={(e) =>
                   setRows((p) => p.map((x, idx) => (idx === i ? { ...x, capacity: e.target.value } : x)))
+                }
+              />
+              <input
+                style={inputStyle}
+                type="number"
+                placeholder="행당 좌석"
+                value={r.seatsPerRow}
+                onChange={(e) =>
+                  setRows((p) => p.map((x, idx) => (idx === i ? { ...x, seatsPerRow: e.target.value } : x)))
                 }
               />
               {rowBtn(i)}
@@ -236,7 +248,7 @@ export default function AdminEventManagePage() {
                   {s.sectionName} <Badge tone="neutral">{s.grade}</Badge>
                 </span>
                 <span>
-                  {formatPrice(s.price)} · {s.capacity}석
+                  {formatPrice(s.price)} · {s.capacity}석 · 행당 {s.seatsPerRow}
                 </span>
               </li>
             ))}

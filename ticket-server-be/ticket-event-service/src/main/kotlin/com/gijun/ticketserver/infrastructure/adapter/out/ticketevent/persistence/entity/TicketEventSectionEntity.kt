@@ -37,6 +37,10 @@ class TicketEventSectionEntity(
     @Column(nullable = false)
     var capacity: Int,
 
+    // 좌석 배치도 행당 좌석 수. 기존 행 호환을 위해 nullable, 매핑 시 기본 20.
+    @Column
+    var seatsPerRow: Int? = null,
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     var createdAt: Instant? = null,
@@ -52,6 +56,7 @@ class TicketEventSectionEntity(
         grade = grade,
         price = price,
         capacity = capacity,
+        seatsPerRow = seatsPerRow ?: 20,
         createdAt = createdAt,
         updatedAt = updatedAt,
     )
@@ -64,6 +69,7 @@ class TicketEventSectionEntity(
             grade = model.grade,
             price = model.price,
             capacity = model.capacity,
+            seatsPerRow = model.seatsPerRow,
         )
     }
 }

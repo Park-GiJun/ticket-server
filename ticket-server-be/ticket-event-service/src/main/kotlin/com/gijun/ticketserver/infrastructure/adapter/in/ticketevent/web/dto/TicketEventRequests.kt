@@ -87,6 +87,10 @@ data class CreateSectionsRequest(
 
         @field:Min(1)
         val capacity: Int,
+
+        /** 좌석 배치도 행당 좌석 수. 미지정 시 기본 20. */
+        @field:Min(1)
+        val seatsPerRow: Int = 20,
     )
 
     // ticketEventId 는 경로 변수에서 받는다.
@@ -98,6 +102,7 @@ data class CreateSectionsRequest(
                 grade = it.grade,
                 price = it.price,
                 capacity = it.capacity,
+                seatsPerRow = it.seatsPerRow,
             )
         },
     )

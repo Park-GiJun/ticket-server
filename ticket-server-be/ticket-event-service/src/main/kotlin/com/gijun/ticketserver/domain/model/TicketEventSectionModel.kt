@@ -21,6 +21,8 @@ data class TicketEventSectionModel(
     val grade: String,
     val price: Long,
     val capacity: Int,
+    /** 좌석 배치도(레이아웃)의 행당 좌석 수. 좌석 생성 시 행×열 그리드로 배치된다. */
+    val seatsPerRow: Int = 20,
     val createdAt: Instant? = null,
     val updatedAt: Instant? = null,
 ) {
@@ -29,5 +31,6 @@ data class TicketEventSectionModel(
         require(grade.isNotBlank()) { "grade must not be blank" }
         require(price >= 0) { "price must not be negative" }
         require(capacity >= 1) { "capacity must be at least 1" }
+        require(seatsPerRow >= 1) { "seatsPerRow must be at least 1" }
     }
 }

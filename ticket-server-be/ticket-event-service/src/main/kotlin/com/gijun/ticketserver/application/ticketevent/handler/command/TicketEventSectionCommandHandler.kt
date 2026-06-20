@@ -37,6 +37,7 @@ class TicketEventSectionCommandHandler(
                 grade = it.grade,
                 price = it.price,
                 capacity = it.capacity,
+                seatsPerRow = it.seatsPerRow,
             )
         }
         val saved = sectionPersistencePort.saveAll(sections)

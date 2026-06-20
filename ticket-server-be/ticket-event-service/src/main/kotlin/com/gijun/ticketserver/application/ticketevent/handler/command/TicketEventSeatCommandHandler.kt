@@ -35,15 +35,17 @@ class TicketEventSeatCommandHandler(
             throw TicketEventException.SectionNotFound()
         }
 
-        // 구역별 capacity 만큼 좌석을 생성한다. ticketEventId 는 구역의 값을 단일 출처로 복사.
+        // 구역별 capacity 만큼 좌석을 행×열 그리드로 생성한다(레이아웃).
+        // 행 = ceil(capacity / seatsPerRow), 행 라벨 A,B,…,Z,AA,… / 열 = 1..seatsPerRow.
         val seats = sections.flatMap { section ->
             val sectionId = requireNotNull(section.id) { "저장된 구역에는 id 가 존재해야 합니다" }
-            (1..section.capacity).map { number ->
+            val perRow = section.seatsPerRow.coerceAtLeast(1)
+            (0 until section.capacity).map { index ->
                 TicketEventSeatModel(
                     sectionId = sectionId,
                     ticketEventId = section.ticketEventId,
-                    rowLabel = "",
-                    seatNumber = number,
+                    rowLabel = rowLabelOf(index / perRow),
+                    seatNumber = index % perRow + 1,
                 )
             }
         }
@@ -55,4 +57,16 @@ class TicketEventSeatCommandHandler(
             createdSeatCount = saved.size,
         )
     }
+}
+
+/** 행 인덱스 → 라벨(bijective base-26): 0→A, 1→B, …, 25→Z, 26→AA, … */
+private fun rowLabelOf(index: Int): String {
+    var n = index + 1
+    val sb = StringBuilder()
+    while (n > 0) {
+        val rem = (n - 1) % 26
+        sb.insert(0, 'A' + rem)
+        n = (n - 1) / 26
+    }
+    return sb.toString()
 }

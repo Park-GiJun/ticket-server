@@ -47,6 +47,7 @@ data class TicketEventSectionResponse(
     val grade: String,
     val price: Long,
     val capacity: Int,
+    val seatsPerRow: Int,
 ) {
     companion object {
         fun from(result: TicketEventSectionResult): TicketEventSectionResponse = TicketEventSectionResponse(
@@ -56,6 +57,7 @@ data class TicketEventSectionResponse(
             grade = result.grade,
             price = result.price,
             capacity = result.capacity,
+            seatsPerRow = result.seatsPerRow,
         )
     }
 }

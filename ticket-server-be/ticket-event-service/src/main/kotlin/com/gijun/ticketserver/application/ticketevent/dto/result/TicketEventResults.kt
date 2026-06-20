@@ -45,6 +45,7 @@ data class TicketEventSectionResult(
     val grade: String,
     val price: Long,
     val capacity: Int,
+    val seatsPerRow: Int,
 ) {
     companion object {
         fun from(model: TicketEventSectionModel): TicketEventSectionResult = TicketEventSectionResult(
@@ -54,6 +55,7 @@ data class TicketEventSectionResult(
             grade = model.grade,
             price = model.price,
             capacity = model.capacity,
+            seatsPerRow = model.seatsPerRow,
         )
     }
 }

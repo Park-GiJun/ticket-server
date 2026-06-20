@@ -30,6 +30,7 @@ data class CreateSectionsCommand(
         val grade: String,
         val price: Long,
         val capacity: Int,
+        val seatsPerRow: Int,
     )
 }
 
