@@ -1,0 +1,28 @@
+server:
+  port: 18084
+
+spring:
+  application:
+    name: payment-service
+
+  # === Datasource (공용 서버 인프라: infra-postgres 의 ticketserver DB) ===
+  datasource:
+    url: jdbc:postgresql://210.121.177.150:5432/ticketserver
+    username: ticketserver
+    password: ts_8dd5abacbee74fd0a6c4a5f57a3bd691
+    driver-class-name: org.postgresql.Driver
+
+  # === JPA / Hibernate ===
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+# === Service Discovery ===
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:18761/eureka/
