@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Layout } from '../components/layout/Layout/Layout';
 import { ProtectedRoute } from '../components/layout/ProtectedRoute/ProtectedRoute';
+import { AdminRoute } from '../components/layout/AdminRoute/AdminRoute';
 import { Spinner } from '../components/ui';
 import styles from './AppRouter.module.css';
 
@@ -15,6 +16,13 @@ const LoginPage = lazy(() => import('../pages/auth/LoginPage'));
 const SignupPage = lazy(() => import('../pages/auth/SignupPage'));
 const MyPage = lazy(() => import('../pages/mypage/MyPage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
+const AdminEventsPage = lazy(() => import('../pages/admin/AdminEventsPage'));
+const AdminEventCreatePage = lazy(
+  () => import('../pages/admin/AdminEventCreatePage')
+);
+const AdminEventManagePage = lazy(
+  () => import('../pages/admin/AdminEventManagePage')
+);
 
 function RouteFallback() {
   return (
@@ -45,6 +53,30 @@ export function AppRouter() {
                 <ProtectedRoute>
                   <MyPage />
                 </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminEventsPage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/events/new"
+              element={
+                <AdminRoute>
+                  <AdminEventCreatePage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/events/:id"
+              element={
+                <AdminRoute>
+                  <AdminEventManagePage />
+                </AdminRoute>
               }
             />
             <Route path="*" element={<NotFoundPage />} />

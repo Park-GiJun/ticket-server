@@ -98,22 +98,35 @@ export async function updateEvent(
   return data;
 }
 
+export interface SectionCreationResult {
+  ticketEvent: TicketEvent;
+  sections: Section[];
+}
+
+/** 구역 일괄 생성. 백엔드는 { sections: [...] } 형태를 받는다. */
 export async function createSections(
   eventId: number,
-  body: CreateSectionBody[]
-): Promise<Section[]> {
-  const { data } = await api.post<Section[]>(
+  sections: CreateSectionBody[]
+): Promise<SectionCreationResult> {
+  const { data } = await api.post<SectionCreationResult>(
     `${BASE}/${eventId}/sections`,
-    body
+    { sections }
   );
   return data;
 }
 
-export async function createSeats(
-  eventId: number,
-  body: CreateSeatBody[]
-): Promise<Seat[]> {
-  const { data } = await api.post<Seat[]>(`${BASE}/${eventId}/seats`, body);
+export interface SeatCreationResult {
+  ticketEvent: TicketEvent;
+  createdSeatCount: number;
+}
+
+/** 좌석 자동 생성. 구역 capacity 기준으로 백엔드가 생성한다(요청 본문 없음). */
+export async function generateSeats(
+  eventId: number
+): Promise<SeatCreationResult> {
+  const { data } = await api.post<SeatCreationResult>(
+    `${BASE}/${eventId}/seats`
+  );
   return data;
 }
 

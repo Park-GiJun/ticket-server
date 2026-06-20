@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useAuthStore, useIsAuthenticated } from '../../../store/authStore';
+import {
+  useAuthStore,
+  useIsAuthenticated,
+  useIsAdmin,
+} from '../../../store/authStore';
 import styles from './Header.module.css';
 
 const NAV_ITEMS = [
@@ -12,6 +16,7 @@ const NAV_ITEMS = [
 export function Header() {
   const navigate = useNavigate();
   const authed = useIsAuthenticated();
+  const isAdmin = useIsAdmin();
   const clearAuth = useAuthStore((s) => s.clearAuth);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [keyword, setKeyword] = useState('');
@@ -78,6 +83,11 @@ export function Header() {
         <div className={styles.actions}>
           {authed ? (
             <>
+              {isAdmin && (
+                <Link to="/admin" className={styles.actionLink}>
+                  관리자
+                </Link>
+              )}
               <Link to="/mypage" className={styles.actionLink}>
                 마이페이지
               </Link>

@@ -31,3 +31,7 @@ export const isAuthenticated = (state: AuthState): boolean => !!state.token;
 /** React 컴포넌트용 훅 셀렉터. */
 export const useIsAuthenticated = (): boolean =>
   useAuthStore((state) => !!state.token);
+
+/** 관리자 여부 셀렉터. */
+export const useIsAdmin = (): boolean =>
+  useAuthStore((state) => state.user?.role === 'ADMIN');
