@@ -14,7 +14,8 @@ DEPLOY="$ROOT/deploy"
 MODULES="discovery:discovery-server gateway:gateway user:user-service events:ticket-event-service"
 
 echo "== 1) bootJar 빌드 =="
-./gradlew --no-daemon \
+# gradlew 가 체크아웃에서 실행권한을 잃을 수 있어 sh 로 호출(권한 무관)
+sh ./gradlew --no-daemon \
   :discovery-server:bootJar :gateway:bootJar :user-service:bootJar :ticket-event-service:bootJar
 
 echo "== 2) 모듈별 이미지 빌드 =="
