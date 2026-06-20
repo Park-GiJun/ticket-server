@@ -15,6 +15,7 @@ val kotlinVersion = libs.versions.kotlin.get()
 val springBootVersion = libs.versions.spring.boot.get()
 val springCloudVersion = libs.versions.spring.cloud.get()
 val kotlinReflectLib = libs.kotlin.reflect
+val micrometerPrometheusLib = libs.micrometer.registry.prometheus
 
 allprojects {
     group = "com.gijun"
@@ -49,6 +50,8 @@ subprojects {
 
     dependencies {
         "implementation"(kotlinReflectLib)
+        // Prometheus 메트릭(/actuator/prometheus). 노출은 management.endpoints exposure 로 제어.
+        "runtimeOnly"(micrometerPrometheusLib)
         "testRuntimeOnly"("org.junit.platform:junit-platform-launcher")
     }
 

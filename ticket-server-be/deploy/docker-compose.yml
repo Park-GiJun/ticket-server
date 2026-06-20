@@ -17,6 +17,7 @@ services:
     restart: unless-stopped
     environment:
       EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,prometheus"
     networks: [ticketserver-net]
 
   gateway:
@@ -27,6 +28,7 @@ services:
     environment:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://ticket-discovery:18761/eureka/
       EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,prometheus"
     ports:
       - "${GATEWAY_PORT:-18080}:18080"
     networks: [ticketserver-net]
@@ -39,6 +41,7 @@ services:
     environment:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://ticket-discovery:18761/eureka/
       EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,prometheus"
     networks: [ticketserver-net]
 
   events:
@@ -49,4 +52,5 @@ services:
     environment:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://ticket-discovery:18761/eureka/
       EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,prometheus"
     networks: [ticketserver-net]
