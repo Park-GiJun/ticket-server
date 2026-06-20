@@ -1,0 +1,52 @@
+# ticket-server 배포 (코어 4서비스) — 홈서버 TeamCity 에이전트에서 deploy.sh 가 실행한다.
+#
+# 앱 application.yml 이 공용 서버 인프라(infra-postgres/redis/kafka @ 210.121.177.150)를 직접 사용하므로
+# 배포에서 추가로 줄 설정은 "Eureka 주소(localhost→discovery 컨테이너)" 와 포트뿐이다. 비밀값 주입 불필요.
+#
+# 포트 스킴: discovery 18761 / gateway 18080(외부) / user 18081 / events 18082 (lol·stock 과 충돌 없음)
+name: ticketserver
+
+networks:
+  ticketserver-net:
+    name: ticketserver-net
+
+services:
+  discovery:
+    image: ticketserver-discovery:${TAG:-latest}
+    container_name: ticket-discovery
+    restart: unless-stopped
+    environment:
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+    networks: [ticketserver-net]
+
+  gateway:
+    image: ticketserver-gateway:${TAG:-latest}
+    container_name: ticket-gateway
+    restart: unless-stopped
+    depends_on: [discovery]
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://ticket-discovery:18761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+    ports:
+      - "${GATEWAY_PORT:-18080}:18080"
+    networks: [ticketserver-net]
+
+  user:
+    image: ticketserver-user:${TAG:-latest}
+    container_name: ticket-user
+    restart: unless-stopped
+    depends_on: [discovery]
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://ticket-discovery:18761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+    networks: [ticketserver-net]
+
+  events:
+    image: ticketserver-events:${TAG:-latest}
+    container_name: ticket-events
+    restart: unless-stopped
+    depends_on: [discovery]
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://ticket-discovery:18761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+    networks: [ticketserver-net]
