@@ -37,7 +37,7 @@ class SecurityConfig(
     companion object {
         private val PUBLIC_PATHS = arrayOf(
             "/api/auth/**",
-            "/actuator/health/**",
+            "/actuator/**",
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/v3/api-docs/**",
