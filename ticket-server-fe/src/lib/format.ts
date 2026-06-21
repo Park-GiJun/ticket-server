@@ -3,6 +3,8 @@ import type {
   TicketEventCategory,
   TicketEventStatus,
 } from '../types/ticketEvent';
+import type { ReservationStatus } from '../types/reservation';
+import type { PaymentMethod, PaymentStatus } from '../types/payment';
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -64,4 +66,38 @@ const SEAT_STATUS_LABELS: Record<SeatStatus, string> = {
 
 export function seatStatusLabel(status: SeatStatus): string {
   return SEAT_STATUS_LABELS[status] ?? status;
+}
+
+const RESERVATION_STATUS_LABELS: Record<ReservationStatus, string> = {
+  HELD: '좌석 선점',
+  CONFIRMED: '예매 완료',
+  CANCELLED: '취소됨',
+  EXPIRED: '선점 만료',
+};
+
+export function reservationStatusLabel(status: ReservationStatus): string {
+  return RESERVATION_STATUS_LABELS[status] ?? status;
+}
+
+const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
+  CARD: '신용·체크카드',
+  KAKAO_PAY: '카카오페이',
+  TOSS: '토스페이',
+  BANK_TRANSFER: '계좌이체',
+};
+
+export function paymentMethodLabel(method: PaymentMethod): string {
+  return PAYMENT_METHOD_LABELS[method] ?? method;
+}
+
+const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
+  PENDING: '결제 대기',
+  APPROVED: '결제 완료',
+  FAILED: '결제 실패',
+  CANCELLED: '결제 취소',
+  REFUNDED: '환불 완료',
+};
+
+export function paymentStatusLabel(status: PaymentStatus): string {
+  return PAYMENT_STATUS_LABELS[status] ?? status;
 }

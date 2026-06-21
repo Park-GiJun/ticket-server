@@ -1,7 +1,14 @@
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { listEvents } from '../../api/ticketEvents';
-import { Badge, Button, Card, EmptyState, Spinner } from '../../components/ui';
+import {
+  Badge,
+  Button,
+  Card,
+  EmptyState,
+  ErrorState,
+  Spinner,
+} from '../../components/ui';
 import type { BadgeTone } from '../../components/ui';
 import type { TicketEventStatus } from '../../types/ticketEvent';
 
@@ -44,15 +51,9 @@ export default function AdminEventsPage() {
           <Spinner size={32} />
         </div>
       ) : isError ? (
-        <EmptyState
-          icon="⚠️"
+        <ErrorState
           title="공연을 불러오지 못했어요"
-          description="잠시 후 다시 시도해 주세요."
-          action={
-            <Button variant="secondary" onClick={() => refetch()}>
-              다시 시도
-            </Button>
-          }
+          onRetry={() => refetch()}
         />
       ) : events.length === 0 ? (
         <EmptyState

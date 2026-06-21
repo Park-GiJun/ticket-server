@@ -12,6 +12,10 @@ const EventDetailPage = lazy(
   () => import('../pages/eventDetail/EventDetailPage')
 );
 const BookingPage = lazy(() => import('../pages/booking/BookingPage'));
+const PaymentPage = lazy(() => import('../pages/payment/PaymentPage'));
+const PaymentResultPage = lazy(
+  () => import('../pages/payment/PaymentResultPage')
+);
 const LoginPage = lazy(() => import('../pages/auth/LoginPage'));
 const SignupPage = lazy(() => import('../pages/auth/SignupPage'));
 const MyPage = lazy(() => import('../pages/mypage/MyPage'));
@@ -44,6 +48,22 @@ export function AppRouter() {
             <Route
               path="/events/:eventId/booking"
               element={<BookingPage />}
+            />
+            <Route
+              path="/reservations/:reservationId/payment"
+              element={
+                <ProtectedRoute>
+                  <PaymentPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/payment/result"
+              element={
+                <ProtectedRoute>
+                  <PaymentResultPage />
+                </ProtectedRoute>
+              }
             />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />

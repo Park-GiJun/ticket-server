@@ -1,20 +1,24 @@
 import { useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   getSeatAvailability,
   getSeats,
   getSections,
 } from '../../api/ticketEvents';
+import { createReservation } from '../../api/reservations';
 import type { Seat, Section } from '../../types/ticketEvent';
+import type { BookingSummary } from '../../types/payment';
 import {
   Badge,
   Button,
   Card,
   EmptyState,
+  ErrorState,
   Skeleton,
 } from '../../components/ui';
 import { toast } from '../../store/toastStore';
+import { useIsAuthenticated } from '../../store/authStore';
 import { formatPrice } from '../../lib/format';
 import SeatMap from './SeatMap';
 import styles from './BookingPage.module.css';
@@ -26,6 +30,9 @@ export default function BookingPage() {
   const { eventId: eventIdParam } = useParams<{ eventId: string }>();
   const eventId = Number(eventIdParam);
   const validId = Number.isFinite(eventId) && eventId > 0;
+
+  const navigate = useNavigate();
+  const isAuthed = useIsAuthenticated();
 
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(
     null
@@ -128,6 +135,41 @@ export default function BookingPage() {
     [selectedSeats]
   );
 
+  /* ----------------------------- 예약 생성 ------------------------------ */
+
+  const createMutation = useMutation({
+    mutationFn: createReservation,
+    onSuccess: (reservation) => {
+      const summary: BookingSummary = {
+        eventId,
+        sectionName: selectedSection?.sectionName ?? '',
+        grade: selectedSection?.grade ?? '',
+        seatLabels: sortedSelectedSeats.map(
+          (s) => `${s.rowLabel}${s.seatNumber}`
+        ),
+        quantity: sortedSelectedSeats.length,
+        totalPrice,
+      };
+      navigate(`/reservations/${reservation.id}/payment`, {
+        state: { summary },
+      });
+    },
+  });
+
+  const handleCheckout = () => {
+    if (!selectedSection || sortedSelectedSeats.length === 0) return;
+    if (!isAuthed) {
+      toast.error('로그인이 필요합니다.');
+      navigate('/login', { state: { from: `/events/${eventId}/booking` } });
+      return;
+    }
+    createMutation.mutate({
+      ticketEventId: eventId,
+      sectionId: selectedSection.id,
+      seatIds: [...selectedSeatIds],
+    });
+  };
+
   /* ----------------------------- 가드 / 로딩 ----------------------------- */
 
   if (!validId) {
@@ -154,22 +196,13 @@ export default function BookingPage() {
   if (isError) {
     return (
       <div className={`container ${styles.page}`}>
-        <EmptyState
-          icon="⚠️"
+        <ErrorState
           title="예매 정보를 불러오지 못했어요"
-          description="잠시 후 다시 시도해 주세요."
-          action={
-            <Button
-              variant="secondary"
-              onClick={() => {
-                sectionsQuery.refetch();
-                seatsQuery.refetch();
-                availabilityQuery.refetch();
-              }}
-            >
-              다시 시도
-            </Button>
-          }
+          onRetry={() => {
+            sectionsQuery.refetch();
+            seatsQuery.refetch();
+            availabilityQuery.refetch();
+          }}
         />
       </div>
     );
@@ -357,10 +390,12 @@ export default function BookingPage() {
               <Button
                 fullWidth
                 size="lg"
-                disabled={sortedSelectedSeats.length === 0}
-                onClick={() => toast.error('예매·결제 기능은 개발 예정입니다.')}
+                disabled={
+                  sortedSelectedSeats.length === 0 || createMutation.isPending
+                }
+                onClick={handleCheckout}
               >
-                결제하기
+                {createMutation.isPending ? '예매 중…' : '결제하기'}
               </Button>
             </Card>
           </aside>
@@ -380,10 +415,10 @@ export default function BookingPage() {
           </div>
           <Button
             size="lg"
-            disabled={selectedSeats.length === 0}
-            onClick={() => toast.error('예매·결제 기능은 개발 예정입니다.')}
+            disabled={selectedSeats.length === 0 || createMutation.isPending}
+            onClick={handleCheckout}
           >
-            결제하기
+            {createMutation.isPending ? '예매 중…' : '결제하기'}
           </Button>
         </div>
       )}

@@ -1,18 +1,30 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Badge,
   Button,
   Card,
   EmptyState,
+  ErrorState,
   Skeleton,
 } from '../../components/ui';
 import type { BadgeTone } from '../../components/ui';
 import { getMeApi } from '../../api/auth';
+import { listMyReservations } from '../../api/reservations';
+import { listEvents } from '../../api/ticketEvents';
 import { useAuthStore } from '../../store/authStore';
-import { formatDate } from '../../lib/format';
+import { formatDate, formatPrice, reservationStatusLabel } from '../../lib/format';
 import type { UserRole, UserStatus } from '../../types/auth';
+import type { ReservationStatus } from '../../types/reservation';
 import styles from './MyPage.module.css';
+
+const RESERVATION_TONES: Record<ReservationStatus, BadgeTone> = {
+  HELD: 'warning',
+  CONFIRMED: 'success',
+  CANCELLED: 'neutral',
+  EXPIRED: 'danger',
+};
 
 const ROLE_LABELS: Record<UserRole, string> = {
   USER: '일반 회원',
@@ -67,6 +79,25 @@ export default function MyPage() {
     queryFn: getMeApi,
   });
 
+  const reservationsQuery = useQuery({
+    queryKey: ['my-reservations'],
+    queryFn: listMyReservations,
+    retry: false,
+  });
+  const reservations = reservationsQuery.data ?? [];
+
+  const eventsQuery = useQuery({
+    queryKey: ['events', {}],
+    queryFn: () => listEvents(),
+    enabled: reservations.length > 0,
+  });
+
+  const eventNameById = useMemo(() => {
+    const map = new Map<number, string>();
+    for (const ev of eventsQuery.data ?? []) map.set(ev.id, ev.ticketEventName);
+    return map;
+  }, [eventsQuery.data]);
+
   const handleLogout = () => {
     clearAuth();
     navigate('/login', { replace: true });
@@ -90,19 +121,9 @@ export default function MyPage() {
               <ProfileSkeleton />
             ) : isError || !user ? (
               <Card padding="lg" className={styles.profileCard}>
-                <EmptyState
-                  icon="⚠️"
+                <ErrorState
                   title="정보를 불러오지 못했어요"
-                  description="잠시 후 다시 시도해 주세요."
-                  action={
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => refetch()}
-                    >
-                      다시 시도
-                    </Button>
-                  }
+                  onRetry={() => refetch()}
                 />
               </Card>
             ) : (
@@ -157,11 +178,53 @@ export default function MyPage() {
           <section className={styles.historyColumn} aria-label="예매 내역">
             <Card padding="lg" className={styles.historyCard}>
               <h2 className={styles.sectionTitle}>예매 내역</h2>
-              <EmptyState
-                icon="🎫"
-                title="준비 중이에요"
-                description="예매 기능이 곧 열릴 예정이에요. 조금만 기다려 주세요."
-              />
+              {reservationsQuery.isLoading ? (
+                <div className={styles.historyList}>
+                  <Skeleton height={72} radius="var(--radius-md)" />
+                  <Skeleton height={72} radius="var(--radius-md)" />
+                </div>
+              ) : reservationsQuery.isError ? (
+                <EmptyState
+                  icon="🎫"
+                  title="예매 내역을 준비 중이에요"
+                  description="예매·결제 기능이 열리면 여기에서 확인할 수 있어요."
+                />
+              ) : reservations.length === 0 ? (
+                <EmptyState
+                  icon="🎫"
+                  title="아직 예매 내역이 없어요"
+                  description="마음에 드는 공연을 찾아 예매해 보세요."
+                  action={
+                    <Link to="/events">
+                      <Button variant="secondary" size="sm">
+                        공연 둘러보기
+                      </Button>
+                    </Link>
+                  }
+                />
+              ) : (
+                <ul className={styles.historyList}>
+                  {reservations.map((r) => (
+                    <li key={r.id} className={styles.historyItem}>
+                      <div className={styles.historyMain}>
+                        <span className={styles.historyEvent}>
+                          {eventNameById.get(r.ticketEventId) ??
+                            `공연 #${r.ticketEventId}`}
+                        </span>
+                        <span className={styles.historyMeta}>
+                          {r.quantity}매 · {formatPrice(r.totalPrice)}
+                        </span>
+                        <span className={styles.historyDate}>
+                          {formatDate(r.createdAt)}
+                        </span>
+                      </div>
+                      <Badge tone={RESERVATION_TONES[r.status] ?? 'neutral'}>
+                        {reservationStatusLabel(r.status)}
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </Card>
           </section>
         </div>

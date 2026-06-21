@@ -7,7 +7,7 @@ import type {
   TicketEventCategory,
   TicketEventStatus,
 } from '../../types/ticketEvent';
-import { Tag, Skeleton, EmptyState } from '../../components/ui';
+import { Tag, Skeleton, EmptyState, ErrorState } from '../../components/ui';
 import EventCard from '../../components/event/EventCard/EventCard';
 import { categoryLabel } from '../../lib/format';
 import styles from './EventListPage.module.css';
@@ -154,19 +154,9 @@ export default function EventListPage() {
           ))}
         </div>
       ) : isError ? (
-        <EmptyState
-          icon="⚠️"
+        <ErrorState
           title="목록을 불러오지 못했어요"
-          description="잠시 후 다시 시도해 주세요."
-          action={
-            <button
-              type="button"
-              className={styles.retryBtn}
-              onClick={() => refetch()}
-            >
-              다시 시도
-            </button>
-          }
+          onRetry={() => refetch()}
         />
       ) : events.length === 0 ? (
         <EmptyState

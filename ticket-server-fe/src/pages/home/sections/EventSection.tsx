@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import type { TicketEvent } from '../../../types/ticketEvent';
 import { EventCard } from '../../../components/event/EventCard/EventCard';
-import { EmptyState, Skeleton } from '../../../components/ui';
+import { EmptyState, ErrorState, Skeleton } from '../../../components/ui';
 import styles from './EventSection.module.css';
 
 export interface EventSectionProps {
@@ -71,11 +71,7 @@ export function EventSection({
           ))}
         </div>
       ) : isError ? (
-        <EmptyState
-          icon="⚠️"
-          title="이벤트를 불러오지 못했어요"
-          description="잠시 후 다시 시도해 주세요."
-        />
+        <ErrorState title="이벤트를 불러오지 못했어요" />
       ) : !visible || visible.length === 0 ? (
         <EmptyState title={emptyTitle} description={emptyDescription} />
       ) : (

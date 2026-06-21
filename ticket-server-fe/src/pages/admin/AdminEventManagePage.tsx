@@ -12,7 +12,7 @@ import {
   openEvent,
 } from '../../api/ticketEvents';
 import type { CreateSectionBody } from '../../api/ticketEvents';
-import { Badge, Button, Card, Spinner } from '../../components/ui';
+import { Badge, Button, Card, ErrorState, Spinner } from '../../components/ui';
 import { toast } from '../../store/toastStore';
 import { formatPrice } from '../../lib/format';
 
@@ -126,7 +126,14 @@ export default function AdminEventManagePage() {
       </div>
     );
   if (eventQuery.isError || !eventQuery.data)
-    return <div className="container" style={{ padding: 24 }}>공연을 불러오지 못했어요.</div>;
+    return (
+      <div className="container" style={{ padding: '24px 0' }}>
+        <ErrorState
+          title="공연을 불러오지 못했어요"
+          onRetry={() => eventQuery.refetch()}
+        />
+      </div>
+    );
 
   const ev = eventQuery.data;
   const sections = sectionsQuery.data ?? [];

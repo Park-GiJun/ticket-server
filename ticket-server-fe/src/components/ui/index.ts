@@ -24,3 +24,6 @@ export type { SkeletonProps } from './Skeleton/Skeleton';
 
 export { EmptyState } from './EmptyState/EmptyState';
 export type { EmptyStateProps } from './EmptyState/EmptyState';
+
+export { ErrorState } from './ErrorState/ErrorState';
+export type { ErrorStateProps } from './ErrorState/ErrorState';

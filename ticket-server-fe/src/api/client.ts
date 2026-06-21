@@ -1,6 +1,14 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/authStore';
 import { toast } from '../store/toastStore';
+import { getErrorMessage } from '../lib/errors';
+
+declare module 'axios' {
+  // 배경 조회(예: 미구현 reservation/payment)에서 404 토스트를 끄기 위한 플래그
+  export interface AxiosRequestConfig {
+    silent404?: boolean;
+  }
+}
 
 export const api = axios.create({
   baseURL: '/api',
@@ -28,14 +36,10 @@ api.interceptors.response.use(
         toast.error('로그인이 필요합니다.');
         window.location.href = '/login';
       }
-    } else if (status === 404) {
-      // 미구현 API(예: reservation/payment) 호출 시
-      toast.error('아직 개발되지 않은 기능입니다. (개발 예정)');
-    } else if (status !== undefined) {
-      const data = error?.response?.data as { message?: string } | undefined;
-      toast.error(data?.message ?? '요청 처리 중 오류가 발생했어요.');
+    } else if (status === 404 && error?.config?.silent404) {
+      // 미구현 API(예: reservation/payment) 배경 조회는 조용히 무시.
     } else {
-      toast.error('서버에 연결할 수 없어요. 잠시 후 다시 시도해 주세요.');
+      toast.error(getErrorMessage(error));
     }
     return Promise.reject(error);
   }
