@@ -120,10 +120,13 @@ $env:JAVA_HOME = 'C:\Users\<user>\.jdks\temurin-25.0.2'
 docker compose -f ..\infra\compose.yaml up -d   # ticket-server-be 기준 상위의 infra/
 ```
 
-**개발도 별도 dev 인프라 없이 공용 홈서버 인프라를 직접 쓴다**(개인 프로젝트 정책): 각 서비스
-`application.yml` 의 datasource/redis/kafka 가 `210.121.177.150` 의 `infra-postgres`(DB `ticketserver`)/
-`infra-redis`(6380)/`infra-kafka`(9094) 를 가리킨다. 따라서 로컬에서 인프라 컨테이너를 띄울 필요가 없다
-(Eureka 만 로컬 `discovery-server` 18761 로 구동). 배포·서버 토폴로지는 `ticket-server-be/deploy/README.md` 참고.
+각 서비스 `application.yml` 의 datasource/redis/kafka/jwt 는 **환경변수(`DB_URL`/`DB_USERNAME`/`DB_PASSWORD`/
+`REDIS_HOST`/`REDIS_PORT`/`REDIS_PASSWORD`/`KAFKA_BOOTSTRAP_SERVERS`/`JWT_SECRET`)로 주입**하며, 기본값은
+로컬 dev(`localhost`)이다. **실제 자격증명은 절대 커밋하지 않는다**(public 저장소). 공용 홈서버 인프라를
+쓰려면 해당 환경변수에 실제 호스트/비밀값을 넣는다(개인 프로젝트 정책상 개발=배포 동일 인프라). 배포는
+`deploy/.env`(미추적, `deploy/.env.example` 참고)로 주입한다. 로컬은 `infra/compose.yaml` 로 인프라를
+띄우거나 환경변수를 직접 설정한다(Eureka 만 로컬 `discovery-server` 18761 로 구동). 배포·서버 토폴로지는
+`ticket-server-be/deploy/README.md` 참고.
 
 ## 기술 스택 세부
 

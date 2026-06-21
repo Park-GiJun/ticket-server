@@ -2,13 +2,23 @@
 # ticket-server 배포 스크립트 — TeamCity 'Deploy' 빌드 구성(수동 트리거)에서 실행.
 # 에이전트(docker.sock 보유)에서 동작: bootJar 빌드 → 모듈별 이미지 빌드 → compose 로 배포.
 #
-# 앱 application.yml 이 공용 인프라/비밀값을 직접 갖고 있어 별도 파라미터 주입은 불필요.
-# 선택 환경변수: GATEWAY_PORT(기본 18080), TAG(기본 latest)
+# DB/Redis/Kafka/JWT 자격증명은 deploy/.env (git 미추적) 에서 주입한다. deploy/.env.example 참고.
+# 선택 환경변수: GATEWAY_PORT(기본 18080), TAG(기본 latest), PUBLIC_HOST(안내 표시용)
 set -euo pipefail
 
 cd "$(dirname "$0")/.."          # 빌드 루트(ticket-server-be)로 이동
 ROOT="$(pwd)"
 DEPLOY="$ROOT/deploy"
+
+# 비밀값/인프라 주소 주입 (.env 가 있으면 compose 변수 치환·컨테이너 env 로 전달)
+ENV_FILE="$DEPLOY/.env"
+ENV_ARG=""
+if [ -f "$ENV_FILE" ]; then
+  ENV_ARG="--env-file $ENV_FILE"
+  set -a; . "$ENV_FILE"; set +a   # PUBLIC_HOST 등 스크립트에서도 참조
+else
+  echo "⚠️  $ENV_FILE 없음 — deploy/.env.example 을 복사해 채우세요(자격증명 미주입 시 기동 실패)."
+fi
 
 # 모듈명(이미지) => Gradle 모듈 디렉토리
 MODULES="discovery:discovery-server gateway:gateway user:user-service events:ticket-event-service"
@@ -33,8 +43,8 @@ echo "== 2.5) FE 이미지 빌드 =="
 docker build -t "ticketserver-fe:${TAG:-latest}" "$ROOT/../ticket-server-fe"
 
 echo "== 3) 배포(compose up) =="
-docker compose -f "$DEPLOY/docker-compose.yml" up -d --remove-orphans
+docker compose $ENV_ARG -f "$DEPLOY/docker-compose.yml" up -d --remove-orphans
 
 echo "== 4) 상태 =="
-docker compose -f "$DEPLOY/docker-compose.yml" ps
-echo "게이트웨이(외부 진입점): http://210.121.177.150:${GATEWAY_PORT:-18080}"
+docker compose $ENV_ARG -f "$DEPLOY/docker-compose.yml" ps
+echo "게이트웨이(외부 진입점): http://${PUBLIC_HOST:-localhost}:${GATEWAY_PORT:-18080}"

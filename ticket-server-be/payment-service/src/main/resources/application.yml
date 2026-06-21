@@ -5,11 +5,11 @@ spring:
   application:
     name: payment-service
 
-  # === Datasource (공용 서버 인프라: infra-postgres 의 ticketserver DB) ===
+  # === Datasource (환경변수 주입. 기본값은 로컬 dev. 운영 자격증명은 절대 커밋 금지) ===
   datasource:
-    url: jdbc:postgresql://210.121.177.150:5432/ticketserver
-    username: ticketserver
-    password: ts_8dd5abacbee74fd0a6c4a5f57a3bd691
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/ticketserver}
+    username: ${DB_USERNAME:ticketserver}
+    password: ${DB_PASSWORD:ticketserver}
     driver-class-name: org.postgresql.Driver
 
   # === JPA / Hibernate ===

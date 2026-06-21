@@ -5,11 +5,11 @@ spring:
   application:
     name: user-service
 
-  # === Datasource (공용 서버 인프라: infra-postgres 의 ticketserver DB) ===
+  # === Datasource (환경변수 주입. 기본값은 로컬 dev. 운영 자격증명은 절대 커밋 금지) ===
   datasource:
-    url: jdbc:postgresql://210.121.177.150:5432/ticketserver
-    username: ticketserver
-    password: ts_8dd5abacbee74fd0a6c4a5f57a3bd691
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/ticketserver}
+    username: ${DB_USERNAME:ticketserver}
+    password: ${DB_PASSWORD:ticketserver}
     driver-class-name: org.postgresql.Driver
 
   # === JPA / Hibernate ===
@@ -21,16 +21,16 @@ spring:
       hibernate:
         format_sql: true
 
-  # === Redis (공용 infra-redis, 비밀번호 재설정 토큰 저장) ===
+  # === Redis (비밀번호 재설정 토큰 저장) ===
   data:
     redis:
-      host: 210.121.177.150
-      port: 6380
-      password: stocksim123
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
 
-  # === Kafka (공용 infra-kafka, 사용자 이벤트 발행) ===
+  # === Kafka (사용자 이벤트 발행) ===
   kafka:
-    bootstrap-servers: 210.121.177.150:9094
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -43,8 +43,8 @@ eureka:
     service-url:
       defaultZone: http://localhost:18761/eureka/
 
-# === JWT ===
+# === JWT (운영에서는 JWT_SECRET 환경변수로 반드시 교체. gateway 와 동일해야 한다) ===
 jwt:
-  secret: ticket-server-dev-secret-please-change-in-production-0123456789abcdef
-  access-token-expiration-millis: 3600000
-  issuer: ticket-server
+  secret: ${JWT_SECRET:local-dev-only-secret-please-override-via-env-0123456789abcdef}
+  access-token-expiration-millis: ${JWT_ACCESS_TOKEN_EXPIRATION_MILLIS:3600000}
+  issuer: ${JWT_ISSUER:ticket-server}

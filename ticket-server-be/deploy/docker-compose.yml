@@ -1,7 +1,7 @@
 # ticket-server 배포 (코어 4서비스) — 홈서버 TeamCity 에이전트에서 deploy.sh 가 실행한다.
 #
-# 앱 application.yml 이 공용 서버 인프라(infra-postgres/redis/kafka @ 210.121.177.150)를 직접 사용하므로
-# 배포에서 추가로 줄 설정은 "Eureka 주소(localhost→discovery 컨테이너)" 와 포트뿐이다. 비밀값 주입 불필요.
+# DB/Redis/Kafka/JWT 자격증명은 deploy/.env (git 미추적) 에서 주입한다. deploy/.env.example 참고.
+# Eureka 주소는 컨테이너 네트워크(localhost→discovery 컨테이너)로 덮어쓴다.
 #
 # 포트 스킴: discovery 18761 / gateway 18080(외부) / user 18081 / events 18082 (lol·stock 과 충돌 없음)
 name: ticketserver
@@ -29,6 +29,8 @@ services:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://ticket-discovery:18761/eureka/
       EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
       MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,prometheus"
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ISSUER: ${JWT_ISSUER:-ticket-server}
     ports:
       - "${GATEWAY_PORT:-18080}:18080"
     networks: [ticketserver-net]
@@ -42,6 +44,15 @@ services:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://ticket-discovery:18761/eureka/
       EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
       MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,prometheus"
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ISSUER: ${JWT_ISSUER:-ticket-server}
     networks: [ticketserver-net]
 
   events:
@@ -53,6 +64,9 @@ services:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://ticket-discovery:18761/eureka/
       EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
       MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,prometheus"
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
     networks: [ticketserver-net]
 
   # 프론트엔드(nginx: 정적 + /api 게이트웨이 프록시)

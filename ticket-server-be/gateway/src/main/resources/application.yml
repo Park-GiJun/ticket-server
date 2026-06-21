@@ -34,5 +34,5 @@ eureka:
 
 # === JWT (검증 전용) — 발급 측 user-service 와 동일해야 한다 ===
 jwt:
-  secret: ticket-server-dev-secret-please-change-in-production-0123456789abcdef
-  issuer: ticket-server
+  secret: ${JWT_SECRET:local-dev-only-secret-please-override-via-env-0123456789abcdef}
+  issuer: ${JWT_ISSUER:ticket-server}

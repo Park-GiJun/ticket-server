@@ -3,7 +3,7 @@
 티켓 예매 서버(`ticket-server`)의 프론트엔드. React 19 + TypeScript + Vite SPA.
 
 백엔드 MSA(Eureka + Gateway + user-service + ticket-event-service)의 단일 외부 진입점인
-게이트웨이(`http://localhost:8080`)와 통신한다.
+게이트웨이(`http://localhost:18080`)와 통신한다.
 
 ## 기술 스택
 
@@ -42,7 +42,7 @@ npm run lint
 `vite.config.ts` 의 `server.proxy` 가 `/api` 로 시작하는 요청을 게이트웨이로 전달한다.
 
 ```
-/api/**  ->  http://localhost:8080  (changeOrigin: true)
+/api/**  ->  http://localhost:18080  (changeOrigin: true)
 ```
 
 따라서 프론트는 항상 상대경로 `/api/...` 로만 호출하면 되고, 별도 환경변수가 필요 없다.
