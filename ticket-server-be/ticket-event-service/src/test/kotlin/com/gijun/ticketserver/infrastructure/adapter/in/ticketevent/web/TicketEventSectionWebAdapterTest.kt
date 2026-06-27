@@ -1,8 +1,8 @@
 package com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web
 
-import com.gijun.ticketserver.application.ticketevent.dto.result.TicketEventSectionResult
-import com.gijun.ticketserver.application.ticketevent.port.`in`.query.GetSectionUseCase
-import com.gijun.ticketserver.application.ticketevent.port.`in`.query.ListSectionsByEventUseCase
+import com.gijun.ticketserver.application.ticketevent.dto.TicketEventSectionResult
+import com.gijun.ticketserver.application.ticketevent.port.`in`.GetSectionUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.ListSectionsByEventUseCase
 import com.gijun.ticketserver.domain.exception.TicketEventException
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.spring.SpringExtension

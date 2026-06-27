@@ -16,7 +16,7 @@ dependencyResolutionManagement {
 }
 
 include(
-    "common",
+    "shared",
     "discovery-server",
     "gateway",
     "user-service",

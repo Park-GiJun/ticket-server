@@ -1,11 +1,11 @@
 package com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web.dto
 
-import com.gijun.ticketserver.application.ticketevent.dto.result.SeatAvailabilityResult
-import com.gijun.ticketserver.application.ticketevent.dto.result.SeatCreationResult
-import com.gijun.ticketserver.application.ticketevent.dto.result.SectionCreationResult
-import com.gijun.ticketserver.application.ticketevent.dto.result.TicketEventResult
-import com.gijun.ticketserver.application.ticketevent.dto.result.TicketEventSeatResult
-import com.gijun.ticketserver.application.ticketevent.dto.result.TicketEventSectionResult
+import com.gijun.ticketserver.application.ticketevent.dto.SeatAvailabilityResult
+import com.gijun.ticketserver.application.ticketevent.dto.SeatCreationResult
+import com.gijun.ticketserver.application.ticketevent.dto.SectionCreationResult
+import com.gijun.ticketserver.application.ticketevent.dto.TicketEventResult
+import com.gijun.ticketserver.application.ticketevent.dto.TicketEventSeatResult
+import com.gijun.ticketserver.application.ticketevent.dto.TicketEventSectionResult
 import com.gijun.ticketserver.domain.enums.SeatStatus
 import com.gijun.ticketserver.domain.enums.TicketCreationStatus
 import com.gijun.ticketserver.domain.enums.TicketEventCategory

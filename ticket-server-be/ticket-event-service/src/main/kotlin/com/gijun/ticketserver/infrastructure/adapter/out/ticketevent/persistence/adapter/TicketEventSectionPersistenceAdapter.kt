@@ -1,6 +1,6 @@
 package com.gijun.ticketserver.infrastructure.adapter.out.ticketevent.persistence.adapter
 
-import com.gijun.ticketserver.application.ticketevent.port.out.persistence.TicketEventSectionPersistencePort
+import com.gijun.ticketserver.application.ticketevent.port.out.TicketEventSectionPersistencePort
 import com.gijun.ticketserver.domain.model.TicketEventSectionModel
 import com.gijun.ticketserver.infrastructure.adapter.out.ticketevent.persistence.entity.TicketEventSectionEntity
 import com.gijun.ticketserver.infrastructure.adapter.out.ticketevent.persistence.repository.TicketEventSectionPersistenceRepository

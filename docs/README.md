@@ -64,7 +64,7 @@ flowchart LR
 | 결제 | `payment-service` | 18084 | ⬜ 골격만 | 헥사고날 패키지 골격만 존재, 비즈니스 로직 전부 TODO |
 | 게이트웨이 | `gateway` | 18080 | ✅ 구현됨 | JWT 검증 · `X-User-*` 신원 헤더 주입 · 라우팅 |
 | 디스커버리 | `discovery-server` | 18761 | ✅ 구현됨 | 단일 노드 Eureka |
-| 공통 | `common` | — | ✅ 구현됨 | JWT 검증기 · 공통 예외 핸들러 · OpenAPI 설정 |
+| 공통 | `shared` | — | ✅ 구현됨 | JWT 검증기 · 공통 예외 핸들러 · OpenAPI 설정 |
 
 ---
 

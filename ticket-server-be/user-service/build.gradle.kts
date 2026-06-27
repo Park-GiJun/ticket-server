@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":common"))
+    implementation(project(":shared"))
 
     // Spring Boot Starters
     implementation(libs.spring.boot.starter.web)

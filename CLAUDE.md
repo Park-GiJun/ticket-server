@@ -27,13 +27,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `ticket-event-service` | 18082 | 티켓 이벤트(공연/경기) CRUD·상태전이·조회 |
 | `reservation-service` | 18083 | 예매 도메인 (진행 중) |
 | `payment-service` | 18084 | 결제 도메인 (진행 중) |
-| `common` | — | 실행 불가 `java-library`. JWT 검증기·공통 예외 핸들러·OpenApi 설정 공유 |
+| `shared` | — | 실행 불가 `java-library`. JWT 검증기·공통 예외 핸들러·OpenApi 설정 공유 |
 
 모든 모듈은 패키지 루트 `com.gijun.ticketserver` 를 공유한다(모듈이 달라도 같은 베이스 패키지).
 
 ## 인증 아키텍처 (핵심)
 
-JWT **발급은 user-service**, **검증은 gateway** 가 담당하며, 양쪽은 `common` 의 `JwtTokenValidator`
+JWT **발급은 user-service**, **검증은 gateway** 가 담당하며, 양쪽은 `shared` 의 `JwtTokenValidator`
 와 동일한 `jwt.secret`/`jwt.issuer` 를 공유한다.
 
 1. `gateway` 의 `JwtAuthGatewayFilter` 가 모든 요청의 `Authorization: Bearer` 를 검증한다.

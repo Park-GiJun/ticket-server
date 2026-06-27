@@ -47,7 +47,7 @@ flowchart TB
 | `ticket-event-service` | 18082 | 티켓 이벤트 CRUD·상태전이·조회 |
 | `reservation-service` | 18083 | 예매 (진행 중) |
 | `payment-service` | 18084 | 결제 (진행 중) |
-| `common` | — | 실행 불가 `java-library`. JWT 검증기·공통 예외 핸들러·OpenAPI 설정 공유 |
+| `shared` | — | 실행 불가 `java-library`. JWT 검증기·공통 예외 핸들러·OpenAPI 설정 공유 |
 
 > 모든 모듈은 같은 베이스 패키지 `com.gijun.ticketserver` 를 공유합니다(모듈이 달라도 동일).
 > 빌드 루트는 저장소 루트가 아니라 **`ticket-server-be/`** 입니다.
@@ -56,7 +56,7 @@ flowchart TB
 
 ## 2. 인증 아키텍처 (핵심)
 
-JWT **발급은 user-service**, **검증은 gateway** 가 담당합니다. 양쪽은 `common` 의
+JWT **발급은 user-service**, **검증은 gateway** 가 담당합니다. 양쪽은 `shared` 의
 `JwtTokenValidator` 와 동일한 `jwt.secret` / `jwt.issuer` 를 공유합니다.
 
 ```mermaid
@@ -184,7 +184,7 @@ infrastructure/
 
 ---
 
-## 4. 공통 모듈 (`common`)
+## 4. 공통 모듈 (`shared`)
 
 실행 불가능한 `java-library` 로, 모든 서비스가 의존하는 공유 코드를 담습니다.
 
@@ -196,7 +196,7 @@ infrastructure/
 | `ApiErrorResponse` | 공통 에러 응답 `{ status, message, fieldErrors }` |
 | `OpenApiConfig` | OpenAPI 3 스펙 + `bearerAuth`(Bearer JWT) 보안 스킴 |
 
-> `role` 은 String 으로 다룹니다(`common` 이 특정 도메인 enum 에 의존하지 않도록).
+> `role` 은 String 으로 다룹니다(`shared` 이 특정 도메인 enum 에 의존하지 않도록).
 
 ### 에러 응답 형식 (전 서비스 공통)
 

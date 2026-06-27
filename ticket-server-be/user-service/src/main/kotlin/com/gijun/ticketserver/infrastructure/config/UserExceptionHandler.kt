@@ -1,6 +1,7 @@
 package com.gijun.ticketserver.infrastructure.config
 
 import com.gijun.ticketserver.domain.exception.UserException
+import com.gijun.ticketserver.shared.web.ApiErrorResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler

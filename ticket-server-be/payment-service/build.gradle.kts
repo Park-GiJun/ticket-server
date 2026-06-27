@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":common"))
+    implementation(project(":shared"))
 
     // Spring Boot Starters (인증은 Gateway 가 담당하므로 security 미포함)
     implementation(libs.spring.boot.starter.web)

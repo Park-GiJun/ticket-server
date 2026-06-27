@@ -12,7 +12,7 @@ import com.gijun.ticketserver.infrastructure.adapter.`in`.user.web.dto.PasswordR
 import com.gijun.ticketserver.infrastructure.adapter.`in`.user.web.dto.RegisterRequest
 import com.gijun.ticketserver.infrastructure.adapter.`in`.user.web.dto.TokenResponse
 import com.gijun.ticketserver.infrastructure.adapter.`in`.user.web.dto.UserResponse
-import com.gijun.ticketserver.infrastructure.config.OpenApiConfig
+import com.gijun.ticketserver.shared.openapi.OpenApiConfig
 import com.gijun.ticketserver.infrastructure.config.security.AuthenticatedUser
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse

@@ -1,9 +1,9 @@
 package com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web
 
-import com.gijun.ticketserver.application.ticketevent.port.`in`.query.GetSectionUseCase
-import com.gijun.ticketserver.application.ticketevent.port.`in`.query.ListSectionsByEventUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.GetSectionUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.ListSectionsByEventUseCase
 import com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web.dto.TicketEventSectionResponse
-import com.gijun.ticketserver.infrastructure.config.OpenApiConfig
+import com.gijun.ticketserver.shared.openapi.OpenApiConfig
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses

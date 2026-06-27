@@ -1,8 +1,8 @@
 package com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web.dto
 
-import com.gijun.ticketserver.application.ticketevent.dto.command.CreateSectionsCommand
-import com.gijun.ticketserver.application.ticketevent.dto.command.CreateTicketEventCommand
-import com.gijun.ticketserver.application.ticketevent.dto.command.UpdateTicketEventCommand
+import com.gijun.ticketserver.application.ticketevent.dto.CreateSectionsCommand
+import com.gijun.ticketserver.application.ticketevent.dto.CreateTicketEventCommand
+import com.gijun.ticketserver.application.ticketevent.dto.UpdateTicketEventCommand
 import com.gijun.ticketserver.domain.enums.TicketEventCategory
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Min

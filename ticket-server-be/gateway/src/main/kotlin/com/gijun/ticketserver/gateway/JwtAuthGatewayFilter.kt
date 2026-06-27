@@ -1,7 +1,7 @@
 package com.gijun.ticketserver.gateway
 
-import com.gijun.ticketserver.infrastructure.config.security.JwtClaims
-import com.gijun.ticketserver.infrastructure.config.security.JwtTokenValidator
+import com.gijun.ticketserver.shared.security.JwtClaims
+import com.gijun.ticketserver.shared.security.JwtTokenValidator
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletRequestWrapper

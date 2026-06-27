@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":common"))
+    implementation(project(":shared"))
 
     implementation(libs.spring.cloud.starter.gateway.server.webmvc)
     implementation(libs.spring.cloud.starter.netflix.eureka.client)

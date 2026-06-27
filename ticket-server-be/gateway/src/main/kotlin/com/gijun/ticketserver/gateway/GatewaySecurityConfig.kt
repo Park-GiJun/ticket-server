@@ -1,7 +1,7 @@
 package com.gijun.ticketserver.gateway
 
-import com.gijun.ticketserver.infrastructure.config.security.JwtProperties
-import com.gijun.ticketserver.infrastructure.config.security.JwtTokenValidator
+import com.gijun.ticketserver.shared.security.JwtProperties
+import com.gijun.ticketserver.shared.security.JwtTokenValidator
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean

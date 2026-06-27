@@ -1,10 +1,10 @@
 package com.gijun.ticketserver.infrastructure.adapter.`in`.ticketevent.web
 
-import com.gijun.ticketserver.application.ticketevent.dto.result.SeatAvailabilityResult
-import com.gijun.ticketserver.application.ticketevent.dto.result.TicketEventSeatResult
-import com.gijun.ticketserver.application.ticketevent.port.`in`.query.GetSeatAvailabilityUseCase
-import com.gijun.ticketserver.application.ticketevent.port.`in`.query.GetSeatUseCase
-import com.gijun.ticketserver.application.ticketevent.port.`in`.query.ListSeatsByEventUseCase
+import com.gijun.ticketserver.application.ticketevent.dto.SeatAvailabilityResult
+import com.gijun.ticketserver.application.ticketevent.dto.TicketEventSeatResult
+import com.gijun.ticketserver.application.ticketevent.port.`in`.GetSeatAvailabilityUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.GetSeatUseCase
+import com.gijun.ticketserver.application.ticketevent.port.`in`.ListSeatsByEventUseCase
 import com.gijun.ticketserver.domain.enums.SeatStatus
 import com.gijun.ticketserver.domain.exception.TicketEventException
 import io.kotest.core.spec.style.FunSpec
