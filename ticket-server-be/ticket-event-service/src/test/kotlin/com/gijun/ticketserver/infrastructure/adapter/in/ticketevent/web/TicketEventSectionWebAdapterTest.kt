@@ -36,6 +36,7 @@ class TicketEventSectionWebAdapterTest(
         grade = "VIP",
         price = 150_000,
         capacity = 100,
+        seatsPerRow = 10,
     )
 
     test("GET /{eventId}/sections — 구역 목록을 200 으로 반환한다") {
