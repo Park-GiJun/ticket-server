@@ -11,8 +11,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 영속성: JPA(Hibernate) + PostgreSQL (로컬 dev 는 H2 PostgreSQL 호환 모드)
 - 부가 인프라: Redis(토큰 저장), Kafka(이벤트 발행)
 
-> `docs/`(저장소 루트)에 **서비스(도메인)별 설계·구현 문서**가 있다(`docs/user/`·`docs/ticket-event/`·
-> `docs/reservation/`, 인덱스는 `docs/README.md`). 작업 기록이라 코드와 어긋날 수 있다 — **코드가 정답이다.**
+> `docs/`(저장소 루트)에 **서비스(도메인)별 설계·구현 문서**가 있다(도메인당 1파일: `docs/user-service.md`·
+> `docs/ticket-event-service.md`·`docs/reservation-service.md`·`docs/payment-service.md`, 시스템 전반은
+> `docs/architecture.md`, 인덱스는 `docs/README.md`). 작업 기록이라 코드와 어긋날 수 있다 — **코드가 정답이다.**
 
 ## 모듈 구조
 

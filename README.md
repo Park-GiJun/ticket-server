@@ -153,7 +153,7 @@ npm run lint
 ## 문서
 
 - [`docs/`](./docs/README.md) — 서비스(도메인)별 설계·구현 문서
-  - [user/](./docs/user/README.md) · [ticket-event/](./docs/ticket-event/README.md) · [reservation/](./docs/reservation/README.md)
+  - [architecture](./docs/architecture.md) · [user-service](./docs/user-service.md) · [ticket-event-service](./docs/ticket-event-service.md) · [reservation-service](./docs/reservation-service.md) · [payment-service](./docs/payment-service.md)
 - [`CLAUDE.md`](./CLAUDE.md) — 아키텍처·빌드·일정관리 파이프라인 등 시스템 전반 가이드(단일 기준)
 </content>
 </invoke>
