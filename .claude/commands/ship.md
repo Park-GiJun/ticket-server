@@ -14,8 +14,8 @@ allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git c
 | Jira cloudId | `c0caf068-84da-4325-8063-45edd0daa2b7` (gijun.atlassian.net) |
 | Jira projectKey | `KAN` ("내 칸반 스페이스") · 이슈타입: `작업` / `에픽` / `하위 작업` |
 | Jira 전이 ID | 해야 할 일=`11` · 진행 중=`21` · 완료=`31` (모든 이슈 공통) |
-| Notion data_source_id | `e4bd1bad-07ad-4084-8eae-34fd9071d20f` (커밋 로그 DB) |
-| Notion 허브 page_id | `38581e31-b648-81d0-b791-f0c4d9fabfd2` |
+| Notion data_source_id | `7c33b987-eb66-4c22-a39c-212d1249ae5c` (커밋 로그 DB, "Ticket Server" 페이지 하위) |
+| Notion 허브 page_id | `38590322-a658-80af-b0cb-ce899e829311` ("Ticket Server") |
 | Slack channel_id | `C0BBY1G754J` (`schedule-history` = 일정 히스토리) — /ship 동기화 알림 전용 |
 
 ## Slack 채널 맵 (용도별 분리 — 봇 참여 확인됨 2026-06-20)
